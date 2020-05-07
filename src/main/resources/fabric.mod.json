@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "stubborn",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Stubborn Chunks",
+  "description": "Unloading chunks was never this tough.",
   "authors": [
-    "Me!"
+    "geeleonidas"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "",
+    "sources": "https://github.com/GeeLeonidas/Stubborn-Chunks"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "GPL-3.0",
+  "icon": "assets/stubborn/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleModKt::init"
+      "io.github.geeleonidas.stubborn.StubbornKt::init"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "stubborn.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.7.1",
@@ -32,6 +32,6 @@
     "minecraft": "1.15.x"
   },
   "suggests": {
-    "flamingo": "*"
+
   }
 }
