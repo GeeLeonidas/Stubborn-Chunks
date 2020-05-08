@@ -1,5 +1,8 @@
 {
   "variants": {
-    "": { "model": "stubborn:block/transceiver" }
+    "facing=north": { "model": "stubborn:block/transceiver" },
+    "facing=east":  { "model": "stubborn:block/transceiver", "y":  90 },
+    "facing=south": { "model": "stubborn:block/transceiver", "y": 180 },
+    "facing=west":  { "model": "stubborn:block/transceiver", "y": 270 }
   }
 }

@@ -76,6 +76,7 @@
   ],
   "textures": {
     "base": "stubborn:block/transceiver",
-    "popfilter": "stubborn:block/transceiver_popfilter"
+    "popfilter": "stubborn:block/transceiver_popfilter",
+    "particle": "stubborn:block/transceiver"
   }
 }
