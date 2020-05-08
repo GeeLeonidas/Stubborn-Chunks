@@ -2,7 +2,9 @@ package io.github.geeleonidas.stubborn.block
 
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornBlock
+import io.github.geeleonidas.stubborn.StubbornInit
 import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
+import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.EntityContext
@@ -38,11 +40,14 @@ class TransceiverBlock: HorizontalFacingBlock(Settings.of(Material.METAL)), Bloc
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity?,
                        hand: Hand?, hit: BlockHitResult?): ActionResult {
         val w = world ?: return ActionResult.PASS
-        if (w.isClient) return ActionResult.SUCCESS
-
         val blockEntity = w.getBlockEntity(pos) as TransceiverBlockEntity? ?: return ActionResult.PASS
-        Stubborn.log("Radius: ${blockEntity.chunkRadius}")
+        if (!w.isClient) {
+            ContainerProviderRegistry.INSTANCE.openContainer(StubbornInit.transceiverBlock.id, player) {
+                    packetByteBuf -> packetByteBuf.writeBlockPos(pos)
+            }
 
+            Stubborn.log("Radius: ${blockEntity.chunkRadius}")
+        }
         return ActionResult.SUCCESS
     }
 

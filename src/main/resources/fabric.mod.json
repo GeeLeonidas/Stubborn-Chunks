@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "io.github.geeleonidas.stubborn.StubbornKt::init"
+    ],
+    "client": [
+      "io.github.geeleonidas.stubborn.client.StubbornClientKt::init"
     ]
   },
   "mixins": [
