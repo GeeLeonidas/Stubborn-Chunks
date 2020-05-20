@@ -3,10 +3,11 @@ package io.github.geeleonidas.stubborn.block
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornBlock
 import io.github.geeleonidas.stubborn.StubbornInit
-import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
-import net.minecraft.block.*
-import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.Block
+import net.minecraft.block.BlockState
+import net.minecraft.block.HorizontalFacingBlock
+import net.minecraft.block.Material
 import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
@@ -24,7 +25,9 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
 
-class TransceiverBlock: HorizontalFacingBlock(Settings.of(Material.METAL)), BlockEntityProvider, StubbornBlock {
+class TransceiverBlock:
+    HorizontalFacingBlock(Settings.of(Material.METAL)), StubbornBlock {
+
     override val id: Identifier = Stubborn.makeId("transceiver")
     init {
         register(this)
@@ -40,14 +43,10 @@ class TransceiverBlock: HorizontalFacingBlock(Settings.of(Material.METAL)), Bloc
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity?,
                        hand: Hand?, hit: BlockHitResult?): ActionResult {
         val w = world ?: return ActionResult.PASS
-        val blockEntity = w.getBlockEntity(pos) as TransceiverBlockEntity? ?: return ActionResult.PASS
-        if (!w.isClient) {
+        if (!w.isClient)
             ContainerProviderRegistry.INSTANCE.openContainer(StubbornInit.transceiverBlock.id, player) {
                     packetByteBuf -> packetByteBuf.writeBlockPos(pos)
             }
-
-            Stubborn.log("Radius: ${blockEntity.chunkRadius}")
-        }
         return ActionResult.SUCCESS
     }
 
@@ -58,6 +57,4 @@ class TransceiverBlock: HorizontalFacingBlock(Settings.of(Material.METAL)), Bloc
             14 * units, 14.5 * units, 14 * units
         )
     }
-
-    override fun createBlockEntity(view: BlockView?): BlockEntity? = TransceiverBlockEntity()
 }

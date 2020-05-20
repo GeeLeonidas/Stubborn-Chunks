@@ -1,14 +1,11 @@
 package io.github.geeleonidas.stubborn
 
 import io.github.geeleonidas.stubborn.block.TransceiverBlock
-import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
 import net.minecraft.block.Block
-import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import java.util.function.Supplier
 
 private val registeredBlocks = mutableMapOf<Identifier, Block>()
 private val registeredItems = mutableMapOf<Identifier, Item>()
@@ -25,8 +22,6 @@ object StubbornInit {
     }
 
     val transceiverBlock = TransceiverBlock()
-    val transceiverBlockEntityType: BlockEntityType<TransceiverBlockEntity> = Registry.register(Registry.BLOCK_ENTITY_TYPE, transceiverBlock.id,
-        BlockEntityType.Builder.create(Supplier { TransceiverBlockEntity() }, transceiverBlock).build(null))
 }
 
 interface StubbornBlock {
