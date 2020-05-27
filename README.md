@@ -1,7 +1,7 @@
-## Stubborn Chunks
+## Stubborn
 This Minecraft mod aims to give you the possibility to do multitasking while exploring, like keeping that mob farm running while you are being impaled by a Drowned.
 
-To start you just have to craft a Transceiver and talk your way to the victory!
+To start you just have to craft and place a Transceiver and you're done!
 
 
 
