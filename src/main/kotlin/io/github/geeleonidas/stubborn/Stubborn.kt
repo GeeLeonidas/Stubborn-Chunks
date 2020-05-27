@@ -10,11 +10,11 @@ import org.apache.logging.log4j.LogManager
 object Stubborn {
     // Reference values
     const val modId = "stubborn"
-    const val modName = "Stubborn Chunks"
+    const val modName = "Stubborn"
     val modItemGroup: ItemGroup = ItemGroup.MISC
 
     enum class Bimoe {
-        NIHILLY, AYUMI, SILVIS, ERIMOS, LAVINA
+        SILVIS, FINIS, SORBIRE, ERIMOS, LAVINA, MANAMI
     }
 
     private val logger = LogManager.getLogger()

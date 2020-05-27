@@ -4,10 +4,7 @@ import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornBlock
 import io.github.geeleonidas.stubborn.StubbornInit
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.HorizontalFacingBlock
-import net.minecraft.block.Material
+import net.minecraft.block.*
 import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
@@ -38,7 +35,8 @@ class TransceiverBlock:
         builder?.add(Properties.HORIZONTAL_FACING)
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext?): BlockState? = defaultState.with(FACING, ctx?.playerFacing?.opposite)
+    override fun getPlacementState(ctx: ItemPlacementContext?): BlockState =
+        defaultState.with(FACING, ctx?.playerFacing?.opposite)
 
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity?,
                        hand: Hand?, hit: BlockHitResult?): ActionResult {
