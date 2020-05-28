@@ -3,6 +3,7 @@
   "package": "io.github.geeleonidas.stubborn.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "client": [
   ],
