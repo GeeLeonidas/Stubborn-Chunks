@@ -18,7 +18,7 @@ class TransceiverController(syncId: Int, playerEntity: PlayerEntity, pos: BlockP
         setRootPanel(root)
         root.setSize(400, 320)
 
-        val dialog = WDialogBox(selectBimoe(world.getBiome(pos)), playerEntity as StubbornPlayer)
+        val dialog = WDialogBox(selectBimoe(world.getBiome(pos)), playerEntity as StubbornPlayer) { world.time }
         root.add(dialog, (root.width - dialog.width) / 2, (root.height - dialog.height) / 2)
 
         root.validate(this)
