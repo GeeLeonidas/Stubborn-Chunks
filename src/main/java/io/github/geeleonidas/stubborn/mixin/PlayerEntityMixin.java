@@ -4,7 +4,6 @@ import io.github.geeleonidas.stubborn.Stubborn;
 import io.github.geeleonidas.stubborn.util.StubbornPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +15,7 @@ import java.util.Map;
 @Mixin(PlayerEntity.class)
 abstract public class PlayerEntityMixin implements StubbornPlayer {
     private final HashMap<Stubborn.Bimoe, Integer> bimoeProgress = new HashMap<>();
+    private final HashMap<Stubborn.Bimoe, Integer> bimoeTextLength = new HashMap<>();
 
     @Override
     public int getBimoeProgress(Stubborn.Bimoe bimoe) {
@@ -25,6 +25,16 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Override
     public void setBimoeProgress(Stubborn.Bimoe bimoe, Integer value) {
         bimoeProgress.put(bimoe, value);
+    }
+
+    @Override
+    public int getBimoeTextLength(Stubborn.Bimoe bimoe) {
+        return bimoeTextLength.getOrDefault(bimoe, 0);
+    }
+
+    @Override
+    public void setBimoeTextLength(Stubborn.Bimoe bimoe, Integer value) {
+        bimoeTextLength.put(bimoe, value);
     }
 
     @Inject(at = @At("HEAD"), method = "writeCustomDataToTag")

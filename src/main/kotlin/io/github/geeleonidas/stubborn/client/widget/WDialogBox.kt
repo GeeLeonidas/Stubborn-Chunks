@@ -4,6 +4,7 @@ import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.widget.WLabel
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WText
+import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.text.LiteralText
@@ -16,57 +17,80 @@ import java.util.function.Supplier
 
 class WDialogBox(
     private val bimoe: Stubborn.Bimoe,
-    private val moddedPlayer: StubbornPlayer,
-    private val actualTick: () -> Long
+    private val moddedPlayer: StubbornPlayer
 ): WPlainPanel() {
 
     private var actualEntry = ""
-    private var entryLength = 0
-    private var lastTick = actualTick.invoke()
+    private var lastTime = Clock.systemUTC().millis()
     private val dialogText: WText
 
     init {
         setSize(dialogSizeX, dialogSizeY)
         backgroundPainter = BackgroundPainter.VANILLA
 
-        // WLabel
-        val name = WLabel(
-            LiteralText(bimoe.name.toLowerCase().capitalize()).
-            formatted(Formatting.BOLD).formatted(selectBimoeFormat(bimoe))
-        )
+        // WLabel TODO: Translate this mess into a widget class
+        val name = object: WLabel(LiteralText(bimoe.name.toLowerCase().capitalize()).
+            formatted(Formatting.BOLD).formatted(selectBimoeFormat(bimoe))) {
+            override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
+                nextDialog()
+                return super.onMouseUp(x, y, button)
+            }
+        }
         add(name, 0, 0)
 
         // Entry
-        // TODO: load entry function
+        // TODO: Implement load entry function
         actualEntry = "0123456789ABCDEFGHIJKLMNOPQ0123456789ABCDEFGHIJKLMNOPQ0123456789ABCDEFGHIJKLMNOPQ0123456789ABCDEFGHIJKLMNOPQ"
 
-        // WText
+        // WText TODO: Translate this mess into a widget class
         val offsetY = 14
-        dialogText = WText(LiteralText(actualEntry.take(entryLength)))
+        val textLength = moddedPlayer.getBimoeTextLength(bimoe)
+        dialogText = object: WText(LiteralText(actualEntry.take(textLength))) {
+            override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
+                nextDialog()
+                return super.onMouseUp(x, y, button)
+            }
+        }
         add(dialogText, 0, offsetY, dialogSizeX, dialogSizeY - offsetY)
     }
 
     override fun tick() {
         super.tick()
 
-        val actual = actualTick.invoke()
-        val delta = actual - lastTick
+        val actual = Clock.systemUTC().millis()
+        val delta = actual - lastTime
+        var textLength = moddedPlayer.getBimoeTextLength(bimoe)
 
-        if (delta > 0L && entryLength < actualEntry.length) {
-            entryLength++
-            dialogText.text = LiteralText(actualEntry.take(entryLength))
-            lastTick = actual
+        if (delta > 10L && textLength < actualEntry.length) {
+            if (actualEntry[textLength] == '§' && textLength + 1 < actualEntry.length) {
+                textLength++
+                moddedPlayer.setBimoeTextLength(bimoe, textLength)
+            }
+
+            textLength++
+            moddedPlayer.setBimoeTextLength(bimoe, textLength)
+            dialogText.text = LiteralText(actualEntry.take(textLength))
+
+            lastTime = actual
         }
     }
 
     private fun nextDialog() {
-        entryLength = actualEntry.length
-
-        // TODO: Implement dialog structure
+        val textLength = moddedPlayer.getBimoeTextLength(bimoe)
+        if (textLength == actualEntry.length) {
+            moddedPlayer.setBimoeTextLength(bimoe, 0)
+            // TODO: Implement load entry function
+        }
+        else {
+            moddedPlayer.setBimoeTextLength(bimoe, actualEntry.length)
+            dialogText.text = LiteralText(actualEntry)
+        }
     }
 
-    override fun onClick(x: Int, y: Int, button: Int) {
-        nextDialog()
+    override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
+        if (button == 0)
+            nextDialog()
+        return super.onMouseUp(x, y, button)
     }
 }
 
