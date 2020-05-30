@@ -8,14 +8,9 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 
 object Stubborn {
-    // Reference values
-    const val modId = "stubborn"
-    const val modName = "Stubborn"
+    private const val modId = "stubborn"
+    private const val modName = "Stubborn"
     val modItemGroup: ItemGroup = ItemGroup.MISC
-
-    enum class Bimoe {
-        SILVIS, FINIS, SORBIRE, ERIMOS, LAVINA, MANAMI
-    }
 
     private val logger = LogManager.getLogger()
 
@@ -31,7 +26,7 @@ fun init() {
     StubbornInit.registerItems()
 
     ContainerProviderRegistry.INSTANCE.registerFactory(StubbornInit.transceiverBlock.id) {
-        syncId, _, playerEntity, buf -> TransceiverController(syncId, playerEntity, buf.readBlockPos())
+            syncId, _, playerEntity, buf -> TransceiverController(syncId, playerEntity, buf.readBlockPos())
     }
 
     Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)

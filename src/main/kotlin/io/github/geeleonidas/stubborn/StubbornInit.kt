@@ -7,10 +7,15 @@ import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
-private val registeredBlocks = mutableMapOf<Identifier, Block>()
-private val registeredItems = mutableMapOf<Identifier, Item>()
-
 object StubbornInit {
+
+    private val registeredBlocks = mutableMapOf<Identifier, Block>()
+    private val registeredItems = mutableMapOf<Identifier, Item>()
+    val transceiverBlock = TransceiverBlock()
+
+    fun addBlock(id: Identifier, block: Block) = registeredBlocks.putIfAbsent(id, block)
+    fun addItem(id: Identifier, item: Item) = registeredItems.putIfAbsent(id, item)
+
     fun registerBlocks() {
         for (pair in registeredBlocks)
             Registry.register(Registry.BLOCK, pair.key, pair.value)
@@ -20,8 +25,6 @@ object StubbornInit {
         for (pair in registeredItems)
             Registry.register(Registry.ITEM, pair.key, pair.value)
     }
-
-    val transceiverBlock = TransceiverBlock()
 }
 
 interface StubbornBlock {
@@ -29,16 +32,14 @@ interface StubbornBlock {
 
     fun register(ref: Block, hasItem: Boolean = true) {
         if (hasItem)
-            registeredItems[id] = BlockItem(ref, Item.Settings().group(Stubborn.modItemGroup))
+            StubbornInit.addItem(id, BlockItem(ref, Item.Settings().group(Stubborn.modItemGroup)))
 
-        registeredBlocks[id] = ref
+        StubbornInit.addBlock(id, ref)
     }
 }
 
 interface StubbornItem {
     val id: Identifier
 
-    fun register(ref: Item) {
-        registeredItems[id] = ref
-    }
+    fun register(ref: Item) = StubbornInit.addItem(id, ref)
 }
