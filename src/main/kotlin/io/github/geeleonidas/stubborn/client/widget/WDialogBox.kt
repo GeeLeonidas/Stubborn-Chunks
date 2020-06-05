@@ -2,10 +2,8 @@ package io.github.geeleonidas.stubborn.client.widget
 
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
-import io.github.cottonmc.cotton.gui.widget.WText
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.github.geeleonidas.stubborn.Bimoe
-import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.text.LiteralText
 import java.time.Clock
@@ -17,7 +15,8 @@ class WDialogBox(
 
     private var actualEntry = ""
     private var lastTime = Clock.systemUTC().millis()
-    private val dialogText: WText
+
+    private val dialogText: WDialogText
 
     init {
         val dialogSizeX = 160
@@ -31,15 +30,13 @@ class WDialogBox(
         add(WDialogLabel(bimoe) { nextDialog() }, 0, 0)
 
         // TODO: Implement load entry function
-        actualEntry = """0123456789ABCDEFGHIJKLMNOPQ
-                        |0123456789ABCDEFGHIJKLMNOPQ
-                        |0123456789ABCDEFGHIJKLMNOPQ
-                        |0123456789ABCDEFGHIJKLMNOPQ""".trimMargin()
+        actualEntry = "This is a template message, there's nothing to read here. Seriously. Why are you still reading?..."
 
         dialogText = WDialogText(actualEntry.take(textLength)) { nextDialog() }
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
     }
 
+    // TODO: Rework this to implement better break lines
     override fun tick() {
         super.tick()
 

@@ -6,7 +6,7 @@ import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.Bimoe
 
 class WDialogLabel(bimoe: Bimoe, private val nextDialog: () -> Unit):
-    WLabel(Bimoe.formattedText(bimoe.name.toLowerCase().capitalize(), bimoe)) {
+    WLabel(bimoe.formatText(bimoe.name.toLowerCase().capitalize())) {
 
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
         if (button == 0) // Left click
