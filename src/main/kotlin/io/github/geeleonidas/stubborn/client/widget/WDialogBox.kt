@@ -6,15 +6,14 @@ import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.text.LiteralText
-import java.time.Clock
 
 class WDialogBox(
     private val bimoe: Bimoe,
     private val moddedPlayer: StubbornPlayer
 ): WPlainPanel() {
 
-    private var actualEntry = ""
-    private var lastTime = Clock.systemUTC().millis()
+    private var currentEntry = ""
+    private var lastTime = System.nanoTime() / 1_000_000L
 
     private val dialogText: WDialogText
 
@@ -30,9 +29,9 @@ class WDialogBox(
         add(WDialogLabel(bimoe) { nextDialog() }, 0, 0)
 
         // TODO: Implement load entry function
-        actualEntry = "This is a template message, there's nothing to read here. Seriously. Why are you still reading?..."
+        currentEntry = "This is a template message, there's nothing to read here. Seriously. Why are you still reading?..."
 
-        dialogText = WDialogText(actualEntry.take(textLength)) { nextDialog() }
+        dialogText = WDialogText(currentEntry.take(textLength)) { nextDialog() }
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
     }
 
@@ -40,33 +39,31 @@ class WDialogBox(
     override fun tick() {
         super.tick()
 
-        val actual = Clock.systemUTC().millis()
-        val delta = actual - lastTime
+        val currentTime = System.nanoTime() / 1_000_000L
+        val delta = currentTime - lastTime
         var textLength = moddedPlayer.getBimoeTextLength(bimoe)
 
-        if (delta > 10L && textLength < actualEntry.length) {
-            if (actualEntry[textLength] == '§' && textLength + 1 < actualEntry.length) {
+        if (delta > 10L && textLength < currentEntry.length) {
+            if (currentEntry[textLength] == '§' && textLength + 1 < currentEntry.length)
                 textLength++
-                moddedPlayer.setBimoeTextLength(bimoe, textLength)
-            }
 
             textLength++
             moddedPlayer.setBimoeTextLength(bimoe, textLength)
-            dialogText.text = LiteralText(actualEntry.take(textLength))
+            dialogText.text = LiteralText(currentEntry.take(textLength))
 
-            lastTime = actual
+            lastTime = currentTime
         }
     }
 
     private fun nextDialog() {
         val textLength = moddedPlayer.getBimoeTextLength(bimoe)
-        if (textLength == actualEntry.length) {
+        if (textLength == currentEntry.length) {
             moddedPlayer.setBimoeTextLength(bimoe, 0)
             // TODO: Implement load entry function
         }
         else {
-            moddedPlayer.setBimoeTextLength(bimoe, actualEntry.length)
-            dialogText.text = LiteralText(actualEntry)
+            moddedPlayer.setBimoeTextLength(bimoe, currentEntry.length)
+            dialogText.text = LiteralText(currentEntry)
         }
     }
 
