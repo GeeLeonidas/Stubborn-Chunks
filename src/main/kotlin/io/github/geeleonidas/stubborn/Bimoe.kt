@@ -3,7 +3,6 @@ package io.github.geeleonidas.stubborn
 import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
-import net.minecraft.util.Identifier
 import net.minecraft.world.biome.Biome
 
 enum class Bimoe(private val formatting: Formatting) {
@@ -16,6 +15,8 @@ enum class Bimoe(private val formatting: Formatting) {
         lowerCasedName().capitalize()
     fun formattedName(): Text =
         LiteralText(capitalizedName()).formatted(this.formatting)
+    fun makeCompoundTagKey(key: String) =
+        "${this.name}_${key.toUpperCase()}"
 
     companion object {
         fun fromBiome(biome: Biome): Bimoe {

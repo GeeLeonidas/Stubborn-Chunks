@@ -1,7 +1,6 @@
 package io.github.geeleonidas.stubborn.mixin;
 
 import io.github.geeleonidas.stubborn.Bimoe;
-import io.github.geeleonidas.stubborn.resource.DialogCondition;
 import io.github.geeleonidas.stubborn.util.StubbornPlayer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,16 +87,16 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Inject(at = @At("HEAD"), method = "readCustomDataFromTag")
     public void readCustomDataFromTag(CompoundTag tag, CallbackInfo info) {
         for (Bimoe bimoe : Bimoe.values()) {
-            final Integer progress = tag.contains(bimoe.name() + "_PROGRESS") ?
-                    tag.getInt(bimoe.name()+ "_PROGRESS") : 0;
+            final String progressKey = bimoe.makeCompoundTagKey("Progress");
+            final Integer progress = tag.contains(progressKey)? tag.getInt(progressKey) : 0;
             bimoeProgress.put(bimoe, progress);
 
-            final Integer dialog = tag.contains(bimoe.name() + "_DIALOG") ?
-                    tag.getInt(bimoe.name() + "_DIALOG") : -1;
+            final String dialogKey = bimoe.makeCompoundTagKey("Dialog");
+            final Integer dialog = tag.contains(dialogKey)? tag.getInt(dialogKey) : -1;
             currentDialog.put(bimoe, dialog);
 
-            final Integer entry = tag.contains(bimoe.name() + "_ENTRY") ?
-                    tag.getInt(bimoe.name() + "_ENTRY") : 0;
+            final String entryKey = bimoe.makeCompoundTagKey("Entry");
+            final Integer entry = tag.contains(entryKey)? tag.getInt(entryKey) : 0;
             currentEntry.put(bimoe, entry);
         }
     }
