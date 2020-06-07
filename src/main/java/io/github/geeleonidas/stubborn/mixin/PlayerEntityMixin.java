@@ -1,6 +1,7 @@
 package io.github.geeleonidas.stubborn.mixin;
 
 import io.github.geeleonidas.stubborn.Bimoe;
+import io.github.geeleonidas.stubborn.resource.DialogCondition;
 import io.github.geeleonidas.stubborn.util.StubbornPlayer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +46,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
 
     @Override
     public int getCurrentEntry(Bimoe bimoe) {
-        return currentEntry.getOrDefault(bimoe, -1);
+        return currentEntry.getOrDefault(bimoe, 0);
     }
 
     @Override
@@ -63,7 +65,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     }
 
     @Override
-    public Integer getDeathCount() {
+    public int getDeathCount() {
         return deathCount;
     }
 
@@ -75,14 +77,29 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Inject(at = @At("HEAD"), method = "writeCustomDataToTag")
     public void writeCustomDataToTag(CompoundTag tag, CallbackInfo info) {
         for (Map.Entry<Bimoe, Integer> entry : bimoeProgress.entrySet())
-            tag.putInt(entry.getKey().name(), entry.getValue());
+            tag.putInt(entry.getKey().name() + "_PROGRESS", entry.getValue());
+
+        for (Map.Entry<Bimoe, Integer> entry : bimoeProgress.entrySet())
+            tag.putInt(entry.getKey().name() + "_DIALOG", entry.getValue());
+
+        for (Map.Entry<Bimoe, Integer> entry : bimoeProgress.entrySet())
+            tag.putInt(entry.getKey().name() + "_ENTRY", entry.getValue());
     }
 
     @Inject(at = @At("HEAD"), method = "readCustomDataFromTag")
     public void readCustomDataFromTag(CompoundTag tag, CallbackInfo info) {
         for (Bimoe bimoe : Bimoe.values()) {
-            final Integer value = tag.contains(bimoe.name()) ? tag.getInt(bimoe.name()) : 0;
-            bimoeProgress.put(bimoe, value);
+            final Integer progress = tag.contains(bimoe.name() + "_PROGRESS") ?
+                    tag.getInt(bimoe.name()+ "_PROGRESS") : 0;
+            bimoeProgress.put(bimoe, progress);
+
+            final Integer dialog = tag.contains(bimoe.name() + "_DIALOG") ?
+                    tag.getInt(bimoe.name() + "_DIALOG") : -1;
+            currentDialog.put(bimoe, dialog);
+
+            final Integer entry = tag.contains(bimoe.name() + "_ENTRY") ?
+                    tag.getInt(bimoe.name() + "_ENTRY") : 0;
+            currentEntry.put(bimoe, entry);
         }
     }
 }

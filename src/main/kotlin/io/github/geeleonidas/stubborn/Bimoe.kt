@@ -10,8 +10,12 @@ enum class Bimoe(private val formatting: Formatting) {
     SILVIS(Formatting.DARK_GREEN), FINIS(Formatting.BLACK), SORBIRE(Formatting.DARK_PURPLE),
     ERIMOS(Formatting.GOLD), LAVINA(Formatting.DARK_BLUE), MANAMI(Formatting.DARK_AQUA);
 
-    fun formatText(text: String): Text =
-        LiteralText(text).formatted(this.formatting)
+    fun lowerCasedName() =
+        this.name.toLowerCase()
+    fun capitalizedName() =
+        lowerCasedName().capitalize()
+    fun formattedName(): Text =
+        LiteralText(capitalizedName()).formatted(this.formatting)
 
     companion object {
         fun fromBiome(biome: Biome): Bimoe {

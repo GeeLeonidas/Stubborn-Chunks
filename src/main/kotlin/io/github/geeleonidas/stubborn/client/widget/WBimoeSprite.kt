@@ -5,7 +5,7 @@ import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
 
 class WBimoeSprite(bimoe: Bimoe):
-    WSprite(Stubborn.makeId("textures/bimoe/${bimoe.name.toLowerCase()}.png")) {
+    WSprite(Stubborn.makeId("textures/bimoe/${bimoe.lowerCasedName()}.png")) {
 
     override fun canResize() = false
 
