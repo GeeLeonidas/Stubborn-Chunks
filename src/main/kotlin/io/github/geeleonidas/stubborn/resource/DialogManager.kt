@@ -1,25 +1,33 @@
 package io.github.geeleonidas.stubborn.resource
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.entity.player.PlayerEntity
 import java.io.InputStreamReader
+import kotlin.reflect.typeOf
 
 object DialogManager {
 
     private val errorDialog =
-        Dialog(-404, listOf("Error 404: Dialog not found."), emptyMap(), DialogCondition.NONE)
+        NodeDialog(-404, listOf("Error 404: Dialog not found."), emptyMap())
 
-    private val loadedDialogs: Map<Bimoe, List<Dialog>>
+    private val rootDialogs: Map<Bimoe, List<RootDialog>>
+    private val loadedDialogs: Map<Bimoe, List<NodeDialog>>
     init {
-        val bimoeDialogs = mutableMapOf<Bimoe, List<Dialog>>()
-        Bimoe.values().forEach { bimoeDialogs[it] = loadBimoeDialogs(it) }
+        val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
+        val starterDialogs = mutableMapOf<Bimoe, List<RootDialog>>()
+        Bimoe.values().forEach { bimoe ->
+            bimoeDialogs[bimoe] = loadBimoeDialogs(bimoe)
+            starterDialogs[bimoe] = bimoeDialogs[bimoe]!!.filterIsInstance<RootDialog>()
+        }
         loadedDialogs = bimoeDialogs.toMap()
+        rootDialogs = starterDialogs.toMap()
     }
 
-    fun getDialog(bimoe: Bimoe, playerEntity: PlayerEntity): Dialog {
+    fun getDialog(bimoe: Bimoe, playerEntity: PlayerEntity): NodeDialog {
         val currentDialog = (playerEntity as StubbornPlayer).getCurrentDialog(bimoe)
 
         return if (currentDialog == -1)
@@ -28,20 +36,20 @@ object DialogManager {
             findDialog(bimoe, currentDialog)
     }
 
-    private fun pickNewDialog(bimoe: Bimoe, playerEntity: PlayerEntity): Dialog {
+    private fun pickNewDialog(bimoe: Bimoe, playerEntity: PlayerEntity): NodeDialog {
         val playerProgress = (playerEntity as StubbornPlayer).getBimoeProgress(bimoe)
-        val bimoeDialogs = loadedDialogs[bimoe]?.filter {
+        val starterDialogs = rootDialogs[bimoe]?.filter {
             it.dialogCondition.checkFor(playerEntity) &&
             it.dialogCondition.getProgressNeeded() <= playerProgress
         } ?: emptyList()
 
-        return bimoeDialogs.minBy { it.dialogCondition.getProgressNeeded() } ?: errorDialog
+        return starterDialogs.minBy { it.dialogCondition.getProgressNeeded() } ?: errorDialog
     }
 
     private fun findDialog(bimoe: Bimoe, id: Int) =
         loadedDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
-    private fun loadBimoeDialogs(bimoe: Bimoe): List<Dialog> {
+    private fun loadBimoeDialogs(bimoe: Bimoe): List<NodeDialog> {
         val path = Stubborn.resource("dialog/${bimoe.lowerCasedName()}.json")
         val jsonStream = javaClass.getResourceAsStream(path)
 
@@ -49,7 +57,7 @@ object DialogManager {
             jsonStream.use {
                 Gson().fromJson(
                     InputStreamReader(it, Charsets.UTF_8),
-                    listOf<Dialog>().javaClass
+                    TypeToken.getParameterized(List::class.java, NodeDialog::class.java).type
                 )
             }
         } catch (exception: Throwable) {

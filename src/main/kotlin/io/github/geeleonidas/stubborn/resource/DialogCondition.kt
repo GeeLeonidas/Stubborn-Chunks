@@ -11,7 +11,6 @@ enum class DialogCondition(
     private val unique: Boolean = false
 ) {
 
-    NONE({ false }, 0), // Purely a flag
     HUNGRY({ player -> player.hungerManager.foodLevel <= 10 }, 1),
     RAINING_SNOWING({ player -> player.world.isRaining || player.world.isThundering }, 1),
 
