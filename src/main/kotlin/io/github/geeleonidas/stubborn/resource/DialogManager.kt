@@ -17,14 +17,15 @@ object DialogManager {
     private val rootDialogs: Map<Bimoe, List<RootDialog>>
     private val loadedDialogs: Map<Bimoe, List<NodeDialog>>
     init {
-        val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
         val starterDialogs = mutableMapOf<Bimoe, List<RootDialog>>()
+        val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
         Bimoe.values().forEach { bimoe ->
-            bimoeDialogs[bimoe] = loadBimoeDialogs(bimoe)
-            starterDialogs[bimoe] = bimoeDialogs[bimoe]!!.filterIsInstance<RootDialog>()
+            val dialogPair = loadBimoeDialogs(bimoe)
+            starterDialogs[bimoe] = dialogPair.first
+            bimoeDialogs[bimoe] = dialogPair.second
         }
-        loadedDialogs = bimoeDialogs.toMap()
         rootDialogs = starterDialogs.toMap()
+        loadedDialogs = bimoeDialogs.toMap()
     }
 
     fun getDialog(bimoe: Bimoe, playerEntity: PlayerEntity): NodeDialog {
@@ -49,20 +50,23 @@ object DialogManager {
     private fun findDialog(bimoe: Bimoe, id: Int) =
         loadedDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
-    private fun loadBimoeDialogs(bimoe: Bimoe): List<NodeDialog> {
+    private fun loadBimoeDialogs(bimoe: Bimoe): Pair<List<RootDialog>, List<NodeDialog>> {
         val path = Stubborn.resource("dialog/${bimoe.lowerCasedName()}.json")
         val jsonStream = javaClass.getResourceAsStream(path)
+
+        val rootDialogList = TypeToken.getParameterized(List::class.java, NodeDialog::class.java).type
+        val nodeDialogList = TypeToken.getParameterized(List::class.java, NodeDialog::class.java).type
 
         return try {
             jsonStream.use {
                 Gson().fromJson(
                     InputStreamReader(it, Charsets.UTF_8),
-                    TypeToken.getParameterized(List::class.java, NodeDialog::class.java).type
+                    TypeToken.getParameterized(Pair::class.java, rootDialogList, nodeDialogList).type
                 )
             }
         } catch (exception: Throwable) {
             exception.printStackTrace()
-            emptyList()
+            emptyList<RootDialog>() to emptyList()
         }
     }
 }
