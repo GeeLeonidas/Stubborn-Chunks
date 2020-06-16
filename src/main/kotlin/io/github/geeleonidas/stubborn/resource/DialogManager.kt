@@ -48,7 +48,8 @@ object DialogManager {
     }
 
     private fun findDialog(bimoe: Bimoe, id: Int) =
-        loadedDialogs[bimoe]?.find { it.id == id } ?: errorDialog
+        loadedDialogs[bimoe]?.find { it.id == id } ?:
+        rootDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
     private fun loadBimoeDialogs(bimoe: Bimoe): Pair<List<RootDialog>, List<NodeDialog>> {
         val path = Stubborn.resource("dialog/${bimoe.lowerCasedName()}.json")

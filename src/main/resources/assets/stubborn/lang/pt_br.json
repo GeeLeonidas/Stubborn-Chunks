@@ -1,3 +1,18 @@
 {
-  "block.stubborn.transceiver": "Transceptor"
+  "block.stubborn.transceiver": "Transceptor",
+
+  "dialog.stubborn.finis.death_lover.01": "Ah. Que sensação estranha. Você aí, eu te conheço?",
+  "dialog.stubborn.finis.death_lover.02": "Eu tenho a impressão de que esta não é a primeira vez que nos vimos.",
+  "dialog.stubborn.finis.death_lover.response.1": "É apenas sua imaginação. Eu nunca estive por aqui antes.",
+  "dialog.stubborn.finis.death_lover.response.2": "Realmente, eu também senti um §odeja vu§r.",
+  "dialog.stubborn.finis.death_lover.response.3": "Nós sempre nos vemos nos meus sonhos.",
+
+  "dialog.stubborn.finis.death_lover.1.01": "Claro. Talvez seja apenas a solidão. Desculpe.",
+
+  "dialog.stubborn.finis.death_lover.2.01": "Ah, espera. Agora eu lembro exatamente quem você é.",
+  "dialog.stubborn.finis.death_lover.2.02": "Você é aquele que nega ser ceifado.",
+
+  "dialog.stubborn.finis.death_lover.3.01": "Mas isso é impossível... Como o fim da existência, as pessoas não podem simplesmente me imaginar.",
+  "dialog.stubborn.finis.death_lover.3.02": "Ah, espera. Isso foi uma cantada?!",
+  "dialog.stubborn.finis.death_lover.3.03": "§o* A presença de Finis se esvai."
 }

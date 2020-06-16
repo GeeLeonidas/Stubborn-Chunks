@@ -1,3 +1,42 @@
 {
-
+  "first": [
+    {
+      "id": 0,
+      "entries": [
+        "dialog.stubborn.finis.death_lover.01",
+        "dialog.stubborn.finis.death_lover.02"
+      ],
+      "responses": {
+        "dialog.stubborn.finis.death_lover.response.1": 1,
+        "dialog.stubborn.finis.death_lover.response.2": 2,
+        "dialog.stubborn.finis.death_lover.response.3": 3
+      },
+      "condition": "DEATH_LOVER"
+    }
+  ],
+  "second": [
+    {
+      "id": 1,
+      "entries": [
+        "dialog.stubborn.finis.death_lover.1.01"
+      ],
+      "responses": {}
+    },
+    {
+      "id": 2,
+      "entries": [
+        "dialog.stubborn.finis.death_lover.2.01",
+        "dialog.stubborn.finis.death_lover.2.02"
+      ],
+      "responses": {}
+    },
+    {
+      "id": 3,
+      "entries": [
+        "dialog.stubborn.finis.death_lover.3.01",
+        "dialog.stubborn.finis.death_lover.3.02"
+      ],
+      "responses": {}
+    }
+  ]
 }
