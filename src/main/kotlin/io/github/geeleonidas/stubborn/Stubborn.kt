@@ -1,6 +1,7 @@
 package io.github.geeleonidas.stubborn
 
 import io.github.geeleonidas.stubborn.container.TransceiverController
+import io.github.geeleonidas.stubborn.resource.DialogManager
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.item.ItemGroup
 import net.minecraft.resource.NamespaceResourceManager
@@ -10,8 +11,8 @@ import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 
 object Stubborn {
-    private const val modId = "stubborn"
-    private const val modName = "Stubborn"
+    const val modId = "stubborn"
+    const val modName = "Stubborn"
 
     val modItemGroup: ItemGroup = ItemGroup.MISC
     private val logger = LogManager.getLogger()
@@ -32,5 +33,5 @@ fun init() {
             syncId, _, playerEntity, buf -> TransceiverController(syncId, playerEntity, buf.readBlockPos())
     }
 
-    Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)
+    DialogManager.initialize()
 }

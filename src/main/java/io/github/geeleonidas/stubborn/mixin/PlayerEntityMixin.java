@@ -17,7 +17,7 @@ import java.util.Map;
 abstract public class PlayerEntityMixin implements StubbornPlayer {
     private final HashMap<Bimoe, Integer> bimoeProgress = new HashMap<>();
     private final HashMap<Bimoe, Integer> bimoeTextLength = new HashMap<>();
-    private final HashMap<Bimoe, Integer> currentDialog = new HashMap<>();
+    private final HashMap<Bimoe, String> currentDialog = new HashMap<>();
     private final HashMap<Bimoe, Integer> currentEntry = new HashMap<>();
 
     private Integer deathCount = 0;
@@ -33,12 +33,12 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     }
 
     @Override
-    public int getCurrentDialog(Bimoe bimoe) {
-        return currentDialog.getOrDefault(bimoe, -1);
+    public String getCurrentDialog(Bimoe bimoe) {
+        return currentDialog.getOrDefault(bimoe, "");
     }
 
     @Override
-    public void setCurrentDialog(Bimoe bimoe, Integer value) {
+    public void setCurrentDialog(Bimoe bimoe, String value) {
         currentDialog.put(bimoe, value);
     }
 
@@ -75,13 +75,22 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Inject(at = @At("HEAD"), method = "writeCustomDataToTag")
     public void writeCustomDataToTag(CompoundTag tag, CallbackInfo info) {
         for (Map.Entry<Bimoe, Integer> entry : bimoeProgress.entrySet())
-            tag.putInt(entry.getKey().name() + "_PROGRESS", entry.getValue());
+            tag.putInt(
+                    entry.getKey().makeCompoundTagKey("Progress"),
+                    entry.getValue()
+            );
 
-        for (Map.Entry<Bimoe, Integer> entry : bimoeProgress.entrySet())
-            tag.putInt(entry.getKey().name() + "_DIALOG", entry.getValue());
+        for (Map.Entry<Bimoe, String> entry : currentDialog.entrySet())
+            tag.putString(
+                    entry.getKey().makeCompoundTagKey("Dialog"),
+                    entry.getValue()
+            );
 
-        for (Map.Entry<Bimoe, Integer> entry : bimoeProgress.entrySet())
-            tag.putInt(entry.getKey().name() + "_ENTRY", entry.getValue());
+        for (Map.Entry<Bimoe, Integer> entry : currentEntry.entrySet())
+            tag.putInt(
+                    entry.getKey().makeCompoundTagKey("Entry"),
+                    entry.getValue()
+            );
     }
 
     @Inject(at = @At("HEAD"), method = "readCustomDataFromTag")
@@ -92,7 +101,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
             bimoeProgress.put(bimoe, progress);
 
             final String dialogKey = bimoe.makeCompoundTagKey("Dialog");
-            final Integer dialog = tag.contains(dialogKey)? tag.getInt(dialogKey) : -1;
+            final String dialog = tag.contains(dialogKey)? tag.getString(dialogKey) : "";
             currentDialog.put(bimoe, dialog);
 
             final String entryKey = bimoe.makeCompoundTagKey("Entry");

@@ -1,42 +1,27 @@
 {
-  "first": [
+  "rootDialogs": [
     {
-      "id": 0,
-      "entries": [
-        "dialog.stubborn.finis.death_lover.01",
-        "dialog.stubborn.finis.death_lover.02"
-      ],
-      "responses": {
-        "dialog.stubborn.finis.death_lover.response.1": 1,
-        "dialog.stubborn.finis.death_lover.response.2": 2,
-        "dialog.stubborn.finis.death_lover.response.3": 3
-      },
+      "id": "death",
+      "entries": 2,
+      "responses": ["rude", "sincere", "sarcastic"],
       "condition": "DEATH_LOVER"
     }
   ],
-  "second": [
+  "nodeDialogs": [
     {
-      "id": 1,
-      "entries": [
-        "dialog.stubborn.finis.death_lover.1.01"
-      ],
-      "responses": {}
+      "id": "death_rude",
+      "entries": 1,
+      "responses": []
     },
     {
-      "id": 2,
-      "entries": [
-        "dialog.stubborn.finis.death_lover.2.01",
-        "dialog.stubborn.finis.death_lover.2.02"
-      ],
-      "responses": {}
+      "id": "death_sincere",
+      "entries": 2,
+      "responses": []
     },
     {
-      "id": 3,
-      "entries": [
-        "dialog.stubborn.finis.death_lover.3.01",
-        "dialog.stubborn.finis.death_lover.3.02"
-      ],
-      "responses": {}
+      "id": "death_sarcastic",
+      "entries": 2,
+      "responses": []
     }
   ]
 }

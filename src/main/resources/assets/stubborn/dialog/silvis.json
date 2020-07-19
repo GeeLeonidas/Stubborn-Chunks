@@ -1,0 +1,22 @@
+{
+  "rootDialogs": [
+    {
+      "id": "hungry1",
+      "entries": 1,
+      "responses": ["sincere", "sarcastic"],
+      "condition": "HUNGRY"
+    }
+  ],
+  "nodeDialogs": [
+    {
+      "id": "hungry1_sincere",
+      "entries": 2,
+      "responses": []
+    },
+    {
+      "id": "hungry1_sarcastic",
+      "entries": 2,
+      "responses": []
+    }
+  ]
+}

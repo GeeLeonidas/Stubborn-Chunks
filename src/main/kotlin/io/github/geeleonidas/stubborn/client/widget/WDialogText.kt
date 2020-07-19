@@ -3,8 +3,6 @@ package io.github.geeleonidas.stubborn.client.widget
 import io.github.cottonmc.cotton.gui.widget.WText
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import net.minecraft.text.LiteralText
-import net.minecraft.text.Text
-import net.minecraft.util.Formatting
 
 class WDialogText(text: String, private val nextDialog: () -> Unit):
     WText(LiteralText(text)) {

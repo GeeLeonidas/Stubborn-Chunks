@@ -1,18 +1,20 @@
 {
   "block.stubborn.transceiver": "Transceiver",
 
-  "dialog.stubborn.finis.death_lover.01": "Oh. What a unusual sensation... You there, do I know you?",
-  "dialog.stubborn.finis.death_lover.02": "I get the feeling that this isn't the first time we met.",
-  "dialog.stubborn.finis.death_lover.response.1": "It's just your imagination. I've never been here before.",
-  "dialog.stubborn.finis.death_lover.response.2": "Indeed. I felt the same §odeja vu§r.",
-  "dialog.stubborn.finis.death_lover.response.3": "We always see each other in my dreams.",
+  "dialog.stubborn.error": "Error 404: Dialog not found.",
 
-  "dialog.stubborn.finis.death_lover.1.01": "Right. Maybe I'm just feeling lonely. Fair enough.",
+  "dialog.stubborn.finis.death.1": "Oh. What a unusual sensation... You there, do I know you?",
+  "dialog.stubborn.finis.death.2": "I get the feeling that this isn't the first time we met.",
+  "response.stubborn.finis.death.rude": "It's just your imagination. I've never been here before.",
+  "response.stubborn.finis.death.sincere": "Indeed. I felt the same §odeja vu§r.",
+  "response.stubborn.finis.death.sarcastic": "We always see each other in my dreams.",
 
-  "dialog.stubborn.finis.death_lover.2.01": "Oh, wait. Now I remember just who you are.",
-  "dialog.stubborn.finis.death_lover.2.02": "You're the one that refuses to be ceased.",
+  "dialog.stubborn.finis.death_rude.1": "Right. Maybe I'm just feeling lonely. Fair enough.",
 
-  "dialog.stubborn.finis.death_lover.3.01": "But that's impossible... As the end of existence, people can't just imagine me.",
-  "dialog.stubborn.finis.death_lover.3.02": "Oh, wait. Was that a flirt?!",
-  "dialog.stubborn.finis.death_lover.3.03": "§o* Finis' presence has vanished."
+  "dialog.stubborn.finis.death_sincere.1": "Oh, wait. Now I remember just who you are.",
+  "dialog.stubborn.finis.death_sincere.2": "You're the one that refuses to be ceased.",
+
+  "dialog.stubborn.finis.death_sarcastic.1": "But that's impossible... As the end of existence, people can't just imagine me.",
+  "dialog.stubborn.finis.death_sarcastic.2": "Oh, wait. Was that a flirt?!",
+  "dialog.stubborn.finis.death_sarcastic.3": "§o* Finis' presence has vanished.§r"
 }

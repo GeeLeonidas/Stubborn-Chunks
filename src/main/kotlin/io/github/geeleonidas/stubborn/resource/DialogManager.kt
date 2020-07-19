@@ -1,18 +1,22 @@
 package io.github.geeleonidas.stubborn.resource
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.gson.JsonObject
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.TranslatableText
+import org.apache.logging.log4j.Level
 import java.io.InputStreamReader
-import kotlin.reflect.typeOf
 
 object DialogManager {
 
-    private val errorDialog =
-        NodeDialog(-404, listOf("Error 404: Dialog not found."), emptyMap())
+    fun initialize() {}
+
+    private val errorDialog = NodeDialog(
+        "error", listOf(TranslatableText("dialog.stubborn.error")), emptyList(), emptyList()
+    )
 
     private val rootDialogs: Map<Bimoe, List<RootDialog>>
     private val loadedDialogs: Map<Bimoe, List<NodeDialog>>
@@ -26,12 +30,14 @@ object DialogManager {
         }
         rootDialogs = starterDialogs.toMap()
         loadedDialogs = bimoeDialogs.toMap()
+
+        Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)
     }
 
     fun getDialog(bimoe: Bimoe, playerEntity: PlayerEntity): NodeDialog {
         val currentDialog = (playerEntity as StubbornPlayer).getCurrentDialog(bimoe)
 
-        return if (currentDialog == -1)
+        return if (currentDialog == "")
             pickNewDialog(bimoe, playerEntity)
         else
             findDialog(bimoe, currentDialog)
@@ -47,7 +53,7 @@ object DialogManager {
         return starterDialogs.minBy { it.dialogCondition.getProgressNeeded() } ?: errorDialog
     }
 
-    private fun findDialog(bimoe: Bimoe, id: Int) =
+    private fun findDialog(bimoe: Bimoe, id: String) =
         loadedDialogs[bimoe]?.find { it.id == id } ?:
         rootDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
@@ -55,19 +61,25 @@ object DialogManager {
         val path = Stubborn.resource("dialog/${bimoe.lowerCasedName()}.json")
         val jsonStream = javaClass.getResourceAsStream(path)
 
-        val rootDialogList = TypeToken.getParameterized(List::class.java, NodeDialog::class.java).type
-        val nodeDialogList = TypeToken.getParameterized(List::class.java, NodeDialog::class.java).type
-
-        return try {
-            jsonStream.use {
-                Gson().fromJson(
-                    InputStreamReader(it, Charsets.UTF_8),
-                    TypeToken.getParameterized(Pair::class.java, rootDialogList, nodeDialogList).type
-                )
+        try {
+            val jsonObject = jsonStream.use {
+                Gson().fromJson(InputStreamReader(it, Charsets.UTF_8), JsonObject::class.java)
             }
+
+            val rootDialogs = mutableListOf<RootDialog>()
+            jsonObject["rootDialogs"].asJsonArray.forEach {
+                rootDialogs += RootDialog.fromJson(it.asJsonObject, bimoe)
+            }
+
+            val nodeDialogs = mutableListOf<NodeDialog>()
+            jsonObject["nodeDialogs"].asJsonArray.forEach {
+                nodeDialogs += NodeDialog.fromJson(it.asJsonObject, bimoe)
+            }
+
+            return rootDialogs to nodeDialogs
         } catch (exception: Throwable) {
             exception.printStackTrace()
-            emptyList<RootDialog>() to emptyList()
+            return emptyList<RootDialog>() to emptyList()
         }
     }
 }

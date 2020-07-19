@@ -1,0 +1,22 @@
+{
+  "rootDialogs": [
+    {
+      "id": "first",
+      "entries": 2,
+      "responses": ["amazed", "confused"],
+      "condition": "FIRST_TIME"
+    }
+  ],
+  "nodeDialogs": [
+    {
+      "id": "first_amazed",
+      "entries": 2,
+      "responses": []
+    },
+    {
+      "id": "first_confused",
+      "entries": 1,
+      "responses": []
+    }
+  ]
+}

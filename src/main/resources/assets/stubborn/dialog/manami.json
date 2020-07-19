@@ -1,0 +1,22 @@
+{
+  "rootDialogs": [
+    {
+      "id": "turtle",
+      "entries": 2,
+      "responses": ["confused", "wholesome"],
+      "condition": "IS_TURTLE"
+    }
+  ],
+  "nodeDialogs": [
+    {
+      "id": "turtle_confused",
+      "entries": 1,
+      "responses": []
+    },
+    {
+      "id": "turtle_wholesome",
+      "entries": 2,
+      "responses": []
+    }
+  ]
+}
