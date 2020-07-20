@@ -15,12 +15,15 @@ open class NodeDialog(
         fun fromJson(jsonObject: JsonObject, bimoe: Bimoe): NodeDialog {
 
             val id = jsonObject["id"].asString
+            val count = jsonObject["entries"].asInt
             val entries = mutableListOf<TranslatableText>()
-            for (i in 1..jsonObject["entries"].asInt) {
-                entries += TranslatableText(
-                    "dialog.${Stubborn.modId}.${bimoe.lowerCasedName()}.$id.$i"
-                )
-            }
+            if (count > 1)
+                for (i in 1..count)
+                    entries += TranslatableText(
+                        "dialog.${Stubborn.modId}.${bimoe.lowerCasedName()}.$id.$i"
+                    )
+            else
+                entries += TranslatableText("dialog.${Stubborn.modId}.${bimoe.lowerCasedName()}.$id")
 
             val nextDialogsIds = mutableListOf<String>()
             val responses = mutableListOf<TranslatableText>()

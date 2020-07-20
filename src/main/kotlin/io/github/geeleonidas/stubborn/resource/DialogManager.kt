@@ -50,7 +50,7 @@ object DialogManager {
             it.dialogCondition.getProgressNeeded() <= playerProgress
         } ?: emptyList()
 
-        return starterDialogs.minBy { it.dialogCondition.getProgressNeeded() } ?: errorDialog
+        return starterDialogs.minBy { it.dialogCondition.getProgressNeeded() } ?: findDialog(bimoe, "away")
     }
 
     private fun findDialog(bimoe: Bimoe, id: String) =

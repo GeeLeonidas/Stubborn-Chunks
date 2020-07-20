@@ -3,6 +3,8 @@
 
   "dialog.stubborn.error": "Erro 404: Diálogo não encontrado.",
 
+  "dialog.stubborn.finis.away": "§o* Você olha para o vazio e sente uma presença, mas, de repente, ela se esvai.§r",
+
   "dialog.stubborn.finis.death.1": "Ah. Que sensação estranha. Você aí, eu te conheço?",
   "dialog.stubborn.finis.death.2": "Eu tenho a impressão de que esta não é a primeira vez que nos vimos.",
   "response.stubborn.finis.death.rude": "É apenas sua imaginação. Eu nunca estive por aqui antes.",

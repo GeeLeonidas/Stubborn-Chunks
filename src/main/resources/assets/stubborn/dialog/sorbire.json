@@ -2,5 +2,10 @@
   "rootDialogs": [
   ],
   "nodeDialogs": [
+    {
+      "id": "away",
+      "entries": 1,
+      "responses": []
+    }
   ]
 }

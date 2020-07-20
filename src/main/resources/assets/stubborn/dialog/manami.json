@@ -9,6 +9,11 @@
   ],
   "nodeDialogs": [
     {
+      "id": "away",
+      "entries": 1,
+      "responses": []
+    },
+    {
       "id": "turtle_confused",
       "entries": 1,
       "responses": []

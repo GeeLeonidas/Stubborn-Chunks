@@ -11,8 +11,11 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.recipe.RecipeType
 import net.minecraft.util.math.BlockPos
 
-class TransceiverController(syncId: Int, playerEntity: PlayerEntity, pos: BlockPos):
-    CottonCraftingController(RecipeType.CRAFTING, syncId, playerEntity.inventory) {
+class TransceiverController(
+    syncId: Int,
+    playerEntity: PlayerEntity,
+    pos: BlockPos
+): CottonCraftingController(RecipeType.CRAFTING, syncId, playerEntity.inventory) {
 
     init {
         val root = WPlainPanel()
@@ -26,7 +29,7 @@ class TransceiverController(syncId: Int, playerEntity: PlayerEntity, pos: BlockP
         val sprite = WBimoeSprite(bimoe)
         root.add(sprite, (root.width - sprite.width) / 2, root.height / 2 - sprite.height + offsetY)
 
-        val dialog = WDialogBox(bimoe, playerEntity as StubbornPlayer)
+        val dialog = WDialogBox(bimoe, playerEntity)
         root.add(dialog, (root.width - dialog.width) / 2, root.height / 2 + offsetY)
 
         root.validate(this)
