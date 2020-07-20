@@ -19,7 +19,7 @@ object DialogManager {
     )
 
     private val rootDialogs: Map<Bimoe, List<RootDialog>>
-    private val loadedDialogs: Map<Bimoe, List<NodeDialog>>
+    private val nodeDialogs: Map<Bimoe, List<NodeDialog>>
     init {
         val starterDialogs = mutableMapOf<Bimoe, List<RootDialog>>()
         val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
@@ -29,7 +29,7 @@ object DialogManager {
             bimoeDialogs[bimoe] = dialogPair.second
         }
         rootDialogs = starterDialogs.toMap()
-        loadedDialogs = bimoeDialogs.toMap()
+        nodeDialogs = bimoeDialogs.toMap()
 
         Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)
     }
@@ -54,7 +54,7 @@ object DialogManager {
     }
 
     private fun findDialog(bimoe: Bimoe, id: String) =
-        loadedDialogs[bimoe]?.find { it.id == id } ?:
+        nodeDialogs[bimoe]?.find { it.id == id } ?:
         rootDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
     private fun loadBimoeDialogs(bimoe: Bimoe): Pair<List<RootDialog>, List<NodeDialog>> {

@@ -13,10 +13,10 @@ open class NodeDialog(
 ) {
     companion object {
         fun fromJson(jsonObject: JsonObject, bimoe: Bimoe): NodeDialog {
-
             val id = jsonObject["id"].asString
             val count = jsonObject["entries"].asInt
             val entries = mutableListOf<TranslatableText>()
+
             if (count > 1)
                 for (i in 1..count)
                     entries += TranslatableText(
@@ -26,16 +26,20 @@ open class NodeDialog(
                 entries += TranslatableText("dialog.${Stubborn.modId}.${bimoe.lowerCasedName()}.$id")
 
             val nextDialogsIds = mutableListOf<String>()
-            val responses = mutableListOf<TranslatableText>()
+            val responseTexts = mutableListOf<TranslatableText>()
+
             for (response in jsonObject["responses"].asJsonArray) {
                 val responseStr = response.asString
-                nextDialogsIds += "${id}_$responseStr"
-                responses += TranslatableText(
+                val nextDialogId = responseStr.split("->"). // Split the response into two parts based on ->
+                    elementAtOrNull(1) ?: "${id}_$responseStr" // If there is a second part, use it as a pointer
+
+                nextDialogsIds += nextDialogId
+                responseTexts += TranslatableText(
                     "response.${Stubborn.modId}.${bimoe.lowerCasedName()}.$id.$responseStr"
                 )
             }
 
-            return NodeDialog(id, entries, responses, nextDialogsIds)
+            return NodeDialog(id, entries, responseTexts, nextDialogsIds)
         }
     }
 }
