@@ -3,18 +3,24 @@ package io.github.geeleonidas.stubborn.client
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornInit
-import io.github.geeleonidas.stubborn.container.TransceiverController
-import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
+import io.github.geeleonidas.stubborn.container.TransceiverGuiDescription
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.util.math.BlockPos
+import net.minecraft.entity.player.PlayerInventory
 
-class TransceiverScreen(syncId: Int, playerEntity: PlayerEntity, pos: BlockPos):
-    CottonInventoryScreen<TransceiverController>(TransceiverController(syncId, playerEntity, pos), playerEntity)
+
+class TransceiverBlockScreen(gui: TransceiverGuiDescription, playerEntity: PlayerEntity):
+    CottonInventoryScreen<TransceiverGuiDescription>(gui, playerEntity)
 
 @Suppress("unused")
 fun init() {
-    ScreenProviderRegistry.INSTANCE.registerFactory(StubbornInit.transceiverBlock.id) {
-            syncId, _, playerEntity, buf -> TransceiverScreen(syncId, playerEntity, buf.readBlockPos())
+    ScreenRegistry.register<TransceiverGuiDescription, TransceiverBlockScreen>(
+        StubbornInit.transceiverHandlerType
+    ) { gui: TransceiverGuiDescription, inventory: PlayerInventory, _ ->
+        TransceiverBlockScreen(
+            gui,
+            inventory.player
+        )
     }
 
     Stubborn.log("Biomes registered as EntityType.MOE successfully!")

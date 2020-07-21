@@ -1,21 +1,19 @@
 package io.github.geeleonidas.stubborn.container
 
-import io.github.cottonmc.cotton.gui.CottonCraftingController
+import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.geeleonidas.stubborn.Bimoe
-import io.github.geeleonidas.stubborn.Stubborn
+import io.github.geeleonidas.stubborn.StubbornInit
 import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
-import io.github.geeleonidas.stubborn.util.StubbornPlayer
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.recipe.RecipeType
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.math.BlockPos
 
-class TransceiverController(
+class TransceiverGuiDescription(
     syncId: Int,
-    playerEntity: PlayerEntity,
+    playerInventory: PlayerInventory,
     pos: BlockPos
-): CottonCraftingController(RecipeType.CRAFTING, syncId, playerEntity.inventory) {
+): SyncedGuiDescription(StubbornInit.transceiverHandlerType, syncId, playerInventory) {
 
     init {
         val root = WPlainPanel()
@@ -29,7 +27,7 @@ class TransceiverController(
         val sprite = WBimoeSprite(bimoe)
         root.add(sprite, (root.width - sprite.width) / 2, root.height / 2 - sprite.height + offsetY)
 
-        val dialog = WDialogBox(bimoe, playerEntity)
+        val dialog = WDialogBox(bimoe, playerInventory.player)
         root.add(dialog, (root.width - dialog.width) / 2, root.height / 2 + offsetY)
 
         root.validate(this)

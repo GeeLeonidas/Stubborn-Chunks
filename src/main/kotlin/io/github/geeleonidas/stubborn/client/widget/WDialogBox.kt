@@ -12,7 +12,7 @@ import net.minecraft.text.LiteralText
 
 class WDialogBox(
     private val bimoe: Bimoe,
-    private val playerEntity: PlayerEntity
+    playerEntity: PlayerEntity
 ): WPlainPanel() {
 
     private val moddedPlayer = playerEntity as StubbornPlayer
@@ -35,7 +35,7 @@ class WDialogBox(
         add(WDialogLabel(bimoe) { nextDialog() }, 0, 0)
 
         currentDialog = DialogManager.getDialog(bimoe, playerEntity)
-        val currentEntry = currentDialog.entries[entryIndex].asString()
+        val currentEntry = currentDialog.entries[entryIndex].string
 
         dialogText = WDialogText(currentEntry.take(textLength)) { nextDialog() }
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
@@ -49,7 +49,7 @@ class WDialogBox(
         val delta = currentTime - lastTime
 
         val entryIndex = moddedPlayer.getCurrentEntry(bimoe)
-        val currentEntry = currentDialog.entries[entryIndex].asString()
+        val currentEntry = currentDialog.entries[entryIndex].string
 
         var textLength = moddedPlayer.getBimoeTextLength(bimoe)
 

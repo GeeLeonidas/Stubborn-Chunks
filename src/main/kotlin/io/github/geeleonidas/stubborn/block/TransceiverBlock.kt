@@ -2,10 +2,8 @@ package io.github.geeleonidas.stubborn.block
 
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornBlock
-import io.github.geeleonidas.stubborn.StubbornInit
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry
+import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
 import net.minecraft.block.*
-import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.state.StateManager
@@ -21,9 +19,10 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-
 class TransceiverBlock:
-    HorizontalFacingBlock(Settings.of(Material.METAL)), StubbornBlock {
+    HorizontalFacingBlock(Settings.of(Material.METAL)),
+    BlockEntityProvider,
+    StubbornBlock {
 
     override val id: Identifier = Stubborn.makeId("transceiver")
     init {
@@ -40,19 +39,23 @@ class TransceiverBlock:
 
     override fun onUse(state: BlockState?, world: World?, pos: BlockPos?, player: PlayerEntity?,
                        hand: Hand?, hit: BlockHitResult?): ActionResult {
-        val w = world ?: return ActionResult.PASS
-        if (!w.isClient)
-            ContainerProviderRegistry.INSTANCE.openContainer(StubbornInit.transceiverBlock.id, player) {
-                    packetByteBuf -> packetByteBuf.writeBlockPos(pos)
-            }
+        player?.openHandledScreen(state?.createScreenHandlerFactory(world, pos))
         return ActionResult.SUCCESS
     }
 
-    override fun getOutlineShape(state: BlockState?, view: BlockView?, pos: BlockPos?, context: EntityContext?): VoxelShape {
+    override fun getOutlineShape(state: BlockState?, world: BlockView?,
+                                 pos: BlockPos?, context: ShapeContext?): VoxelShape {
         val units = 1.0 / 16.0
         return VoxelShapes.cuboid(
             2 * units, 0 * units, 2 * units,
             14 * units, 14.5 * units, 14 * units
         )
     }
+
+    override fun createScreenHandlerFactory(state: BlockState?, world: World?, pos: BlockPos?) =
+        world?.getBlockEntity(pos) as TransceiverBlockEntity?
+
+    override fun createBlockEntity(blockView: BlockView?) =
+        TransceiverBlockEntity()
+
 }

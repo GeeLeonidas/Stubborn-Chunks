@@ -1,11 +1,7 @@
 package io.github.geeleonidas.stubborn
 
-import io.github.geeleonidas.stubborn.container.TransceiverController
 import io.github.geeleonidas.stubborn.resource.DialogManager
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.item.ItemGroup
-import net.minecraft.resource.NamespaceResourceManager
-import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
@@ -28,10 +24,6 @@ fun init() {
 
     StubbornInit.registerBlocks()
     StubbornInit.registerItems()
-
-    ContainerProviderRegistry.INSTANCE.registerFactory(StubbornInit.transceiverBlock.id) {
-            syncId, _, playerEntity, buf -> TransceiverController(syncId, playerEntity, buf.readBlockPos())
-    }
 
     DialogManager.initialize()
 }
