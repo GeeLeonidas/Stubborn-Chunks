@@ -16,7 +16,6 @@ import java.util.Map;
 @Mixin(PlayerEntity.class)
 abstract public class PlayerEntityMixin implements StubbornPlayer {
     private final HashMap<Bimoe, Integer> bimoeProgress = new HashMap<>();
-    private final HashMap<Bimoe, Integer> bimoeTextLength = new HashMap<>();
     private final HashMap<Bimoe, String> currentDialog = new HashMap<>();
     private final HashMap<Bimoe, Integer> currentEntry = new HashMap<>();
 
@@ -50,16 +49,6 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Override
     public void setCurrentEntry(Bimoe bimoe, Integer value) {
         currentEntry.put(bimoe, value);
-    }
-
-    @Override
-    public int getBimoeTextLength(Bimoe bimoe) {
-        return bimoeTextLength.getOrDefault(bimoe, 0);
-    }
-
-    @Override
-    public void setBimoeTextLength(Bimoe bimoe, Integer value) {
-        bimoeTextLength.put(bimoe, value);
     }
 
     @Override

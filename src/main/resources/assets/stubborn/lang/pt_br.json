@@ -3,6 +3,7 @@
 
   "dialog.stubborn.error": "Erro 404: Diálogo não encontrado.",
 
+
   "dialog.stubborn.finis.away": "§o* Você olha para o vazio e sente uma presença, mas, de repente, ela se esvai.§r",
 
   "dialog.stubborn.finis.death.1": "Ah. Que sensação estranha. Você aí, eu te conheço?",
@@ -18,5 +19,8 @@
 
   "dialog.stubborn.finis.death_sarcastic.1": "Mas isso é impossível... Como o fim da existência, as pessoas não podem simplesmente me imaginar.",
   "dialog.stubborn.finis.death_sarcastic.2": "Ah, espera. Isso foi uma cantada?!",
-  "dialog.stubborn.finis.death_sarcastic.3": "§o* A presença de Finis se esvai.§r"
+  "dialog.stubborn.finis.death_sarcastic.3": "§o* A presença de Finis se esvai.§r",
+
+
+  "dialog.stubborn.silvis.away": "§o* Subitamente, você começa a sentir saudade. Você olha para os lados e não vê ninguém, mas este sentimento certamente te conforta.§r"
 }

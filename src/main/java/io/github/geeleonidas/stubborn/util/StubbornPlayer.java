@@ -12,8 +12,5 @@ public interface StubbornPlayer {
     int getCurrentEntry(Bimoe bimoe);
     void setCurrentEntry(Bimoe bimoe, Integer value);
 
-    int getBimoeTextLength(Bimoe bimoe);
-    void setBimoeTextLength(Bimoe bimoe, Integer value);
-
     int getDeathCount();
 }

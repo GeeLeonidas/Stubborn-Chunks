@@ -3,6 +3,7 @@
 
   "dialog.stubborn.error": "Error 404: Dialog not found.",
 
+
   "dialog.stubborn.finis.away": "§o* You look into the void and perceive a presence, but, suddenly, it vanishes.§r",
 
   "dialog.stubborn.finis.death.1": "Oh. What a unusual sensation... You there, do I know you?",
@@ -18,5 +19,8 @@
 
   "dialog.stubborn.finis.death_sarcastic.1": "But that's impossible... As the end of existence, people can't just imagine me.",
   "dialog.stubborn.finis.death_sarcastic.2": "Oh, wait. Was that a flirt?!",
-  "dialog.stubborn.finis.death_sarcastic.3": "§o* Finis' presence has vanished.§r"
+  "dialog.stubborn.finis.death_sarcastic.3": "§o* Finis' presence has vanished.§r",
+
+
+  "dialog.stubborn.silvis.away": "§o* Suddenly, you're all nostalgic. You look around and see no one, but this sensation surely comforts you.§r"
 }
