@@ -6,6 +6,9 @@ import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.StubbornInit
 import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
+import io.github.geeleonidas.stubborn.client.widget.WResponseButton
+import io.github.geeleonidas.stubborn.resource.DialogManager
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.math.BlockPos
 
@@ -15,22 +18,44 @@ class TransceiverGuiDescription(
     pos: BlockPos
 ): SyncedGuiDescription(StubbornInit.transceiverHandlerType, syncId, playerInventory) {
 
+    private val bimoeSprite: WBimoeSprite
+    private val dialogBox: WDialogBox
+    private val responseButtons = mutableListOf<WResponseButton>()
+
+    private val playerEntity: PlayerEntity
+    private val bimoe: Bimoe
+
+    private var currentDialog = DialogManager.errorDialog
+
     init {
         val root = WPlainPanel()
         setRootPanel(root)
         root.setSize(400, 320)
 
-        val bimoe = Bimoe.fromBiome(world.getBiome(pos))
+        bimoe = Bimoe.fromBiome(world.getBiome(pos))
+        playerEntity = playerInventory.player
 
         val offsetY = 35
 
-        val sprite = WBimoeSprite(bimoe)
-        root.add(sprite, (root.width - sprite.width) / 2, root.height / 2 - sprite.height + offsetY)
+        bimoeSprite = WBimoeSprite(bimoe)
+        root.add(bimoeSprite,
+            (root.width - bimoeSprite.width) / 2,
+            root.height / 2 - bimoeSprite.height + offsetY
+        )
 
-        val dialog = WDialogBox(bimoe, playerInventory.player)
-        root.add(dialog, (root.width - dialog.width) / 2, root.height / 2 + offsetY)
+        dialogBox = WDialogBox(bimoe, playerEntity)
+        root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
 
         root.validate(this)
+    }
+
+    private fun generateResponses() {
+        // TODO: Plan on how the button arrangement is going to be done
+    }
+
+    private fun onResponseClick(toDialogId: String) {
+        responseButtons.forEach { this.rootPanel.remove(it) }
+        currentDialog = DialogManager.getDialog(bimoe, playerEntity)
     }
 
     override fun addPainters() {}

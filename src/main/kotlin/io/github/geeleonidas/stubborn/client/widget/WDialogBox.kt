@@ -28,7 +28,7 @@ class WDialogBox(
     private val dialogText: WDialogText
 
     init {
-        val dialogSizeX = 160
+        val dialogSizeX = 180
         val dialogSizeY = 50
         val textOffsetY = 14
 
