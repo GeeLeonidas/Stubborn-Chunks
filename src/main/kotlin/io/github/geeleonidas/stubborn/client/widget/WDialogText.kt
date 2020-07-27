@@ -5,7 +5,7 @@ import io.github.cottonmc.cotton.gui.widget.WWidget
 import net.minecraft.text.LiteralText
 
 class WDialogText(
-    private val nextDialog: () -> Unit
+    private val onClick: () -> Unit
 ): WText(LiteralText("")) {
 
     var entry = ""
@@ -50,7 +50,7 @@ class WDialogText(
 
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
         if (button == 0) // Left click
-            nextDialog.invoke()
+            onClick.invoke()
         return super.onMouseUp(x, y, button)
     }
 }

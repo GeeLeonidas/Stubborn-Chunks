@@ -4,25 +4,12 @@ import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.github.geeleonidas.stubborn.Bimoe
-import io.github.geeleonidas.stubborn.resource.DialogManager
-import io.github.geeleonidas.stubborn.util.StubbornPlayer
-import net.minecraft.entity.player.PlayerEntity
 
 class WDialogBox(
-    private val bimoe: Bimoe,
-    private val playerEntity: PlayerEntity
+    bimoe: Bimoe,
+    currentEntry: String,
+    private val callNextEntry: ((String) -> Unit) -> Unit
 ): WPlainPanel() {
-
-    private val moddedPlayer
-        get() = playerEntity as StubbornPlayer
-
-    // TODO: Move this up in the hierarchy
-    private var currentDialog = DialogManager.errorDialog
-        set(value) {
-            moddedPlayer.setCurrentDialog(bimoe, value.id)
-            moddedPlayer.setCurrentEntry(bimoe, 0)
-            field = value
-        }
 
     private val dialogLabel: WDialogLabel
     private val dialogText: WDialogText
@@ -35,40 +22,25 @@ class WDialogBox(
         setSize(dialogSizeX, dialogSizeY)
         backgroundPainter = BackgroundPainter.VANILLA
 
-        dialogLabel = WDialogLabel(bimoe) { nextDialog() }
+        dialogLabel = WDialogLabel(bimoe, this::onClick)
         add(dialogLabel, 0, 0)
 
-        dialogText = WDialogText { nextDialog() }
+        dialogText = WDialogText(this::onClick)
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
 
-        currentDialog = DialogManager.getDialog(bimoe, playerEntity)
-        dialogText.entry = getCurrentEntry()
+        dialogText.entry = currentEntry
     }
 
-    private fun nextDialog() {
-        if (dialogText.isFinished()) {
-            val newEntry = moddedPlayer.getCurrentEntry(bimoe) + 1
-            if (newEntry >= currentDialog.entries.size) {
-                moddedPlayer.setCurrentDialog(bimoe, "")
-                currentDialog = DialogManager.getDialog(bimoe, playerEntity)
-                return
-            }
-
-            moddedPlayer.setCurrentEntry(bimoe, newEntry)
-            // TODO: Fix upcoming dialogs
-            dialogText.entry = getCurrentEntry()
-            return
-        }
-
-        dialogText.finish()
+    private fun onClick() {
+        if (dialogText.isFinished())
+            callNextEntry.invoke(dialogText::entry::set)
+        else
+            dialogText.finish()
     }
-
-    private fun getCurrentEntry() =
-        currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
 
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
         if (button == 0)
-            nextDialog()
+            onClick()
         return super.onMouseUp(x, y, button)
     }
 }

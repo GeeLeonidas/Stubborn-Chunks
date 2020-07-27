@@ -7,7 +7,7 @@ import net.minecraft.text.LiteralText
 
 class WDialogLabel(
     bimoe: Bimoe,
-    private val nextDialog: () -> Unit
+    private val onClick: () -> Unit
 ): WLabel(bimoe.formattedName()) {
 
     private val bimoeName = bimoe.formattedName()
@@ -19,7 +19,7 @@ class WDialogLabel(
 
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
         if (button == 0) // Left click
-            nextDialog.invoke()
+            onClick.invoke()
         return super.onMouseUp(x, y, button)
     }
 }

@@ -29,11 +29,16 @@ open class NodeDialog(
             val responseTexts = mutableListOf<TranslatableText>()
 
             for (response in jsonObject["responses"].asJsonArray) {
-                val responseStr = response.asString
-                val nextDialogId = responseStr.split("->"). // Split the response into two parts based on ->
-                    elementAtOrNull(1) ?: "${id}_$responseStr" // If there is a second part, use it as a pointer
+                val responseAndPointer = response.asString.split("->")
 
-                nextDialogsIds += nextDialogId
+                val responseStr = responseAndPointer.first()
+                val pointerStr =
+                    if (responseAndPointer.size > 1)
+                        responseAndPointer[1]
+                    else
+                        "${id}_${responseStr}"
+
+                nextDialogsIds += pointerStr
                 responseTexts += TranslatableText(
                     "response.${Stubborn.modId}.${bimoe.lowerCasedName()}.$id.$responseStr"
                 )
