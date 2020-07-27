@@ -20,89 +20,88 @@ class TransceiverGuiDescription(
 
     private val root = WPlainPanel()
 
-    private val bimoeSprite: WBimoeSprite
-    private val dialogBox: WDialogBox
+    private val bimoe = Bimoe.fromBiome(world.getBiome(pos))
+
+    private val bimoeSprite = WBimoeSprite(bimoe)
+    private val dialogBox = WDialogBox(bimoe, this::callNextEntry)
     private val responseButtons = mutableListOf<WResponseButton>()
 
     private val playerEntity = playerInventory.player
     private val moddedPlayer = playerEntity as StubbornPlayer
-    private val bimoe: Bimoe
 
-    private var currentDialog = DialogManager.errorDialog
+    private var currentDialog = DialogManager.getDialog(bimoe, playerEntity)
+        set(value) {
+            if (value.id != currentDialog.id) {
+                moddedPlayer.setCurrentEntry(bimoe, 0)
+                moddedPlayer.setCurrentDialog(bimoe, value.id)
+                dialogBox.dialogText.entry = value.entries[0].string
+                field = value
+            }
+        }
 
     init {
         setRootPanel(root)
         root.setSize(400, 320)
 
-        bimoe = Bimoe.fromBiome(world.getBiome(pos))
-
         val offsetY = 35
 
-        bimoeSprite = WBimoeSprite(bimoe)
         root.add(bimoeSprite,
             (root.width - bimoeSprite.width) / 2,
             root.height / 2 - bimoeSprite.height + offsetY
         )
 
-        currentDialog = DialogManager.getDialog(bimoe, playerEntity)
-
-        dialogBox = WDialogBox(bimoe,
-            currentDialog.entries[0].string,
-            this::callNextEntry
-        )
         root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
+        dialogBox.dialogText.entry =
+            currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
 
         root.validate(this)
     }
 
-    private fun generateResponses(entrySetter: (String) -> Unit) {
+    private fun generateResponses() {
         val responses = this.currentDialog.responses
         val nextDialogsIds = this.currentDialog.nextDialogsIds
 
-        val buttonSizeX = 100
+        val buttonSizeX = 320
         val gapSizeY = 10
+        val offsetY = -25
         val totalSizeY = gapSizeY * responses.size + 20 * responses.size
 
         for (i in responses.indices) {
-            root.add(
-                WResponseButton(responses[i]) { onResponseClick(nextDialogsIds[i], entrySetter) },
-                (root.width - buttonSizeX) / 2, (root.height - totalSizeY) / 2 + (gapSizeY * i + 20 * i),
+            val button = WResponseButton(responses[i]) { onResponseClick(nextDialogsIds[i]) }
+            responseButtons += button
+            root.add(button,
+                (root.width - buttonSizeX) / 2,
+                (root.height - totalSizeY) / 2 + (gapSizeY * i + 20 * i) + offsetY,
                 buttonSizeX, 20
             )
         }
     }
 
-    private fun onResponseClick(toDialogId: String, entrySetter: (String) -> Unit) {
-        responseButtons.forEach { this.rootPanel.remove(it) }
+    private fun onResponseClick(toDialogId: String) {
+        responseButtons.forEach { root.remove(it) }
+        responseButtons.clear()
         moddedPlayer.setCurrentEntry(bimoe, 0)
         moddedPlayer.setCurrentDialog(bimoe, toDialogId)
         currentDialog = DialogManager.getDialog(bimoe, playerEntity)
-        entrySetter.invoke(currentDialog.entries[0].string)
     }
 
-    private fun callNextEntry(entrySetter: (String) -> Unit) {
+    private fun callNextEntry() {
         val nextIndex = moddedPlayer.getCurrentEntry(bimoe) + 1
 
         if (nextIndex < currentDialog.entries.size) {
             moddedPlayer.setCurrentEntry(bimoe, nextIndex)
-            entrySetter.invoke(currentDialog.entries[nextIndex].string)
+            dialogBox.dialogText.entry = currentDialog.entries[nextIndex].string
             return
         }
 
         if (currentDialog.responses.isEmpty()) {
             moddedPlayer.setCurrentDialog(bimoe, "")
-            val newDialog = DialogManager.getDialog(bimoe, playerEntity)
-            if (newDialog.id != currentDialog.id) {
-                moddedPlayer.setCurrentEntry(bimoe, 0)
-                moddedPlayer.setCurrentDialog(bimoe, newDialog.id)
-                currentDialog = newDialog
-                entrySetter.invoke(currentDialog.entries[0].string)
-            }
+            currentDialog = DialogManager.getDialog(bimoe, playerEntity)
             return
         }
 
         if (responseButtons.isEmpty())
-            generateResponses(entrySetter)
+            generateResponses()
     }
 
     override fun addPainters() {}

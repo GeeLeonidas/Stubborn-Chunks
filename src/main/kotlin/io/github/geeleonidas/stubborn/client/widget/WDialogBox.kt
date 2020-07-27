@@ -7,12 +7,11 @@ import io.github.geeleonidas.stubborn.Bimoe
 
 class WDialogBox(
     bimoe: Bimoe,
-    currentEntry: String,
-    private val callNextEntry: ((String) -> Unit) -> Unit
+    private val callNextEntry: () -> Unit
 ): WPlainPanel() {
 
-    private val dialogLabel: WDialogLabel
-    private val dialogText: WDialogText
+    val dialogLabel: WDialogLabel
+    val dialogText: WDialogText
 
     init {
         val dialogSizeX = 180
@@ -27,13 +26,11 @@ class WDialogBox(
 
         dialogText = WDialogText(this::onClick)
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
-
-        dialogText.entry = currentEntry
     }
 
     private fun onClick() {
         if (dialogText.isFinished())
-            callNextEntry.invoke(dialogText::entry::set)
+            callNextEntry.invoke()
         else
             dialogText.finish()
     }

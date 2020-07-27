@@ -47,10 +47,10 @@ object DialogManager {
         val playerProgress = (playerEntity as StubbornPlayer).getBimoeProgress(bimoe)
         val starterDialogs = rootDialogs[bimoe]?.filter {
             it.dialogCondition.checkFor(playerEntity) &&
-            it.dialogCondition.getProgressNeeded() <= playerProgress
+            it.dialogCondition.progressNeeded <= playerProgress
         } ?: emptyList()
 
-        return starterDialogs.minBy { it.dialogCondition.getProgressNeeded() } ?: findDialog(bimoe, "away")
+        return starterDialogs.minBy { it.dialogCondition.progressNeeded } ?: findDialog(bimoe, "away")
     }
 
     private fun findDialog(bimoe: Bimoe, id: String) =
