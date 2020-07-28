@@ -2,7 +2,7 @@
   "rootDialogs": [
     {
       "id": "turtle",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": ["confused", "wholesome"],
       "condition": "IS_TURTLE"
     }
@@ -10,17 +10,17 @@
   "nodeDialogs": [
     {
       "id": "away",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     },
     {
       "id": "turtle_confused",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     },
     {
       "id": "turtle_wholesome",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": []
     }
   ]

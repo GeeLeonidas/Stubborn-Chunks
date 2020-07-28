@@ -4,7 +4,7 @@
   "nodeDialogs": [
     {
       "id": "away",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     }
   ]

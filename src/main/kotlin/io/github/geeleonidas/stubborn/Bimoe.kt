@@ -9,12 +9,12 @@ enum class Bimoe(private val formatting: Formatting) {
     SILVIS(Formatting.DARK_GREEN), FINIS(Formatting.BLACK), SORBIRE(Formatting.DARK_PURPLE),
     ERIMOS(Formatting.GOLD), LAVINA(Formatting.DARK_BLUE), MANAMI(Formatting.DARK_AQUA);
 
-    fun lowerCasedName() =
+    val lowerCasedName =
         this.name.toLowerCase()
-    fun capitalizedName() =
-        lowerCasedName().capitalize()
-    fun formattedName(): Text =
-        LiteralText(capitalizedName()).formatted(this.formatting)
+    val capitalizedName =
+        lowerCasedName.capitalize()
+    val formattedName: Text =
+        LiteralText(capitalizedName).formatted(this.formatting)
     fun makeCompoundTagKey(key: String) =
         "${this.name}_${key.toUpperCase()}"
 
@@ -22,6 +22,8 @@ enum class Bimoe(private val formatting: Formatting) {
         fun fromBiome(biome: Biome): Bimoe {
             if (biome.precipitation == Biome.Precipitation.SNOW)
                 return LAVINA
+
+            Stubborn.log(biome.category.getName())
 
             return when (biome.category) {
                 Biome.Category.DESERT, Biome.Category.MESA, Biome.Category.SAVANNA -> ERIMOS

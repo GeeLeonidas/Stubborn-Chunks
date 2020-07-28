@@ -2,7 +2,7 @@
   "rootDialogs": [
     {
       "id": "hungry1",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": ["sincere", "sarcastic"],
       "condition": "HUNGRY"
     }
@@ -10,17 +10,17 @@
   "nodeDialogs": [
     {
       "id": "away",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     },
     {
       "id": "hungry1_sincere",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": []
     },
     {
       "id": "hungry1_sarcastic",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": []
     }
   ]

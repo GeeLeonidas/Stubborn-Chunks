@@ -8,12 +8,12 @@ import net.minecraft.text.LiteralText
 class WDialogLabel(
     bimoe: Bimoe,
     private val onClick: () -> Unit
-): WLabel(bimoe.formattedName()) {
+): WLabel(bimoe.formattedName) {
 
-    private val bimoeName = bimoe.formattedName()
+    private val bimoeTextName = bimoe.formattedName
     var visible = true
        set(value) {
-           this.setText(if (value) bimoeName else LiteralText(""))
+           this.setText(if (value) bimoeTextName else LiteralText(""))
            field = value
        }
 

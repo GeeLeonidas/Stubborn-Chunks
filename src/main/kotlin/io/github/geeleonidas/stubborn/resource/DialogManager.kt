@@ -58,7 +58,7 @@ object DialogManager {
         rootDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
     private fun loadBimoeDialogs(bimoe: Bimoe): Pair<List<RootDialog>, List<NodeDialog>> {
-        val path = Stubborn.resource("dialog/${bimoe.lowerCasedName()}.json")
+        val path = Stubborn.resource("dialog/${bimoe.lowerCasedName}.json")
         val jsonStream = javaClass.getResourceAsStream(path)
 
         try {

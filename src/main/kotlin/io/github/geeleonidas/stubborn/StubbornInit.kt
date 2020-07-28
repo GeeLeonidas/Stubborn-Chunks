@@ -9,7 +9,6 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
 
@@ -25,9 +24,9 @@ object StubbornInit {
         BlockEntityType.Builder.create(Supplier { TransceiverBlockEntity() }, transceiverBlock).build(null)
     )
     val transceiverHandlerType =
-        ScreenHandlerRegistry.registerSimple<TransceiverGuiDescription>(transceiverBlock.id) {
-                syncId, playerInventory ->
-            TransceiverGuiDescription(syncId, playerInventory, BlockPos.ORIGIN)
+        ScreenHandlerRegistry.registerExtended<TransceiverGuiDescription>(transceiverBlock.id) {
+                syncId, playerInventory, buffer ->
+            TransceiverGuiDescription(syncId, playerInventory, buffer.readBlockPos())
     }
 
     fun addBlock(id: Identifier, block: Block) = registeredBlocks.putIfAbsent(id, block)

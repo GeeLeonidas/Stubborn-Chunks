@@ -2,7 +2,7 @@
   "rootDialogs": [
     {
       "id": "first",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": ["amazed", "confused"],
       "condition": "FIRST_TIME"
     }
@@ -10,17 +10,17 @@
   "nodeDialogs": [
     {
       "id": "away",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     },
     {
       "id": "first_amazed",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": []
     },
     {
       "id": "first_confused",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     }
   ]

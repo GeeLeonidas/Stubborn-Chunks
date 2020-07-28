@@ -3,6 +3,7 @@ package io.github.geeleonidas.stubborn.container
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.geeleonidas.stubborn.Bimoe
+import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornInit
 import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
@@ -31,12 +32,12 @@ class TransceiverGuiDescription(
 
     private var currentDialog = DialogManager.getDialog(bimoe, playerEntity)
         set(value) {
-            if (value.id != currentDialog.id) {
-                moddedPlayer.setCurrentEntry(bimoe, 0)
-                moddedPlayer.setCurrentDialog(bimoe, value.id)
-                dialogBox.dialogText.entry = value.entries[0].string
-                field = value
-            }
+            if (value.id == currentDialog.id)
+                return
+            moddedPlayer.setCurrentEntry(bimoe, 0)
+            moddedPlayer.setCurrentDialog(bimoe, value.id)
+            dialogBox.dialogText.entry = value.entries[0].string
+            field = value
         }
 
     init {
@@ -49,6 +50,8 @@ class TransceiverGuiDescription(
             (root.width - bimoeSprite.width) / 2,
             root.height / 2 - bimoeSprite.height + offsetY
         )
+
+        Stubborn.log(pos.toShortString())
 
         root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
         dialogBox.dialogText.entry =
@@ -80,7 +83,6 @@ class TransceiverGuiDescription(
     private fun onResponseClick(toDialogId: String) {
         responseButtons.forEach { root.remove(it) }
         responseButtons.clear()
-        moddedPlayer.setCurrentEntry(bimoe, 0)
         moddedPlayer.setCurrentDialog(bimoe, toDialogId)
         currentDialog = DialogManager.getDialog(bimoe, playerEntity)
     }

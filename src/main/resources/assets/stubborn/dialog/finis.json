@@ -2,7 +2,7 @@
   "rootDialogs": [
     {
       "id": "death",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": ["rude", "sincere", "sarcastic"],
       "condition": "DEATH_LOVER"
     }
@@ -10,22 +10,22 @@
   "nodeDialogs": [
     {
       "id": "away",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     },
     {
       "id": "death_rude",
-      "entries": 1,
+      "entryListSize": 1,
       "responses": []
     },
     {
       "id": "death_sincere",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": []
     },
     {
       "id": "death_sarcastic",
-      "entries": 2,
+      "entryListSize": 2,
       "responses": []
     }
   ]
