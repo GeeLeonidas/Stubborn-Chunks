@@ -14,8 +14,9 @@ object DialogManager {
 
     fun initialize() {}
 
-    val errorDialog = NodeDialog(
-        "", listOf(TranslatableText("dialog.stubborn.error")), emptyList(), emptyList()
+    private val errorDialog = NodeDialog(
+        "", listOf(TranslatableText("dialog.stubborn.error")),
+        emptyList(), emptyList(), emptyMap(), emptyMap()
     )
 
     private val rootDialogs: Map<Bimoe, List<RootDialog>>

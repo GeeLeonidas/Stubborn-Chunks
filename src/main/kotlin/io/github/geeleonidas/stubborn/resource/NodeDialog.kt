@@ -9,12 +9,14 @@ open class NodeDialog(
     val id: String,
     val entries: List<TranslatableText>,
     val responses: List<TranslatableText>,
-    val nextDialogsIds: List<String>
+    val nextDialogsIds: List<String>,
+    val entriesBimoeEffects: Map<Int, EntryBimoeEffect>,
+    val entriesTextEffects: Map<Int, List<EntryTextEffect>>
 ) {
     companion object {
-        fun fromJson(jsonObject: JsonObject, bimoe: Bimoe): NodeDialog {
-            val id = jsonObject["id"].asString
-            val count = jsonObject["entryListSize"].asInt
+        fun fromJson(dialogObject: JsonObject, bimoe: Bimoe): NodeDialog {
+            val id = dialogObject["id"].asString
+            val count = dialogObject["entryListSize"].asInt
             val entries = mutableListOf<TranslatableText>()
 
             if (count > 1)
@@ -28,7 +30,7 @@ open class NodeDialog(
             val nextDialogsIds = mutableListOf<String>()
             val responseTexts = mutableListOf<TranslatableText>()
 
-            for (response in jsonObject["responses"].asJsonArray) {
+            for (response in dialogObject["responses"].asJsonArray) {
                 val responseAndPointer = response.asString.split("->")
 
                 val responseStr = responseAndPointer.first()
@@ -41,7 +43,28 @@ open class NodeDialog(
                 )
             }
 
-            return NodeDialog(id, entries, responseTexts, nextDialogsIds)
+            val entriesBimoeEffects = mutableMapOf<Int,EntryBimoeEffect>()
+            val entriesTextEffects = mutableMapOf<Int,List<EntryTextEffect>>()
+
+            if (dialogObject.has("entriesEffects"))
+                for ((key,value) in dialogObject["entriesEffects"].asJsonObject.entrySet()) {
+                    val entryIndex = key.toInt() - 1
+                    val entryEffectArray = value.asJsonArray
+
+                    val bimoeEffectName = entryEffectArray.first().asString
+                    if (bimoeEffectName != "DEFAULT")
+                        entriesBimoeEffects[entryIndex] = EntryBimoeEffect.valueOf(bimoeEffectName)
+
+                    val tempEffectList = mutableListOf<EntryTextEffect>()
+                    for (i in 1 until entryEffectArray.size())
+                        tempEffectList += EntryTextEffect.valueOf(entryEffectArray[i].asString)
+
+                    if (tempEffectList.isNotEmpty())
+                        entriesTextEffects[entryIndex] = tempEffectList
+                }
+
+            return NodeDialog(id, entries, responseTexts,
+                nextDialogsIds, entriesBimoeEffects, entriesTextEffects)
         }
     }
 }

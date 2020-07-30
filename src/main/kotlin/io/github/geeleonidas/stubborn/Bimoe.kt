@@ -23,8 +23,6 @@ enum class Bimoe(private val formatting: Formatting) {
             if (biome.precipitation == Biome.Precipitation.SNOW)
                 return LAVINA
 
-            Stubborn.log(biome.category.getName())
-
             return when (biome.category) {
                 Biome.Category.DESERT, Biome.Category.MESA, Biome.Category.SAVANNA -> ERIMOS
 

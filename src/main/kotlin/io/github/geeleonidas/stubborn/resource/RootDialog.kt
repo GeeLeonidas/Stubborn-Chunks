@@ -9,8 +9,10 @@ class RootDialog(
     entries: List<TranslatableText>,
     responses: List<TranslatableText>,
     nextDialogsIds: List<String>,
+    entriesBimoeEffects: Map<Int, EntryBimoeEffect>,
+    entriesTextEffects: Map<Int, List<EntryTextEffect>>,
     val dialogCondition: DialogCondition
-): NodeDialog(id, entries, responses, nextDialogsIds) {
+): NodeDialog(id, entries, responses, nextDialogsIds, entriesBimoeEffects, entriesTextEffects) {
     companion object {
         fun fromJson(jsonObject: JsonObject, bimoe: Bimoe): RootDialog {
             val superDialog = NodeDialog.fromJson(jsonObject, bimoe)
@@ -18,6 +20,7 @@ class RootDialog(
 
             return RootDialog(
                 superDialog.id, superDialog.entries, superDialog.responses, superDialog.nextDialogsIds,
+                superDialog.entriesBimoeEffects, superDialog.entriesTextEffects,
                 condition
             )
         }
