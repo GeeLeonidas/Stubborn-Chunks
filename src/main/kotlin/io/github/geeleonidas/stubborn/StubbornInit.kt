@@ -4,6 +4,7 @@ import io.github.geeleonidas.stubborn.block.TransceiverBlock
 import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
 import io.github.geeleonidas.stubborn.container.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
+import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import net.fabricmc.fabric.api.network.PacketConsumer
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
@@ -19,7 +20,6 @@ object StubbornInit {
 
     private val registeredBlocks = mutableMapOf<Identifier, Block>()
     private val registeredItems = mutableMapOf<Identifier, Item>()
-    private val registeredPackets = mutableMapOf<Identifier, PacketConsumer>()
 
     val transceiverBlock = TransceiverBlock()
     val transceiverBlockEntityType = Registry.register(
@@ -34,8 +34,6 @@ object StubbornInit {
 
     fun addBlock(id: Identifier, block: Block) = registeredBlocks.putIfAbsent(id, block)
     fun addItem(id: Identifier, item: Item) = registeredItems.putIfAbsent(id, item)
-    fun addPacket(id: Identifier, packetConsumer: PacketConsumer) =
-        registeredPackets.putIfAbsent(id, packetConsumer)
 
     fun registerBlocks() {
         for (pair in registeredBlocks)
@@ -49,8 +47,7 @@ object StubbornInit {
 
     fun registerPackets() {
         ChangeDialogC2SPacket.initialize()
-        for (pair in registeredPackets)
-            ServerSidePacketRegistry.INSTANCE.register(pair.key, pair.value)
+        NextEntryC2SPacket.initialize()
     }
 }
 
@@ -71,8 +68,9 @@ interface StubbornItem {
     fun register(ref: Item) = StubbornInit.addItem(id, ref)
 }
 
-interface StubbornPacket: PacketConsumer {
+interface StubbornC2SPacket: PacketConsumer {
     val id: Identifier
-
-    fun register() = StubbornInit.addPacket(id, this)
+    fun initialize() = Unit
+    fun register() =
+        ServerSidePacketRegistry.INSTANCE.register(id, this)
 }

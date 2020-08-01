@@ -38,7 +38,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
 
     @Override
     public void setCurrentDialog(Bimoe bimoe, String value) {
-        if (value.equals("away")) return;
+        currentEntry.put(bimoe, 0);
         currentDialog.put(bimoe, value);
     }
 

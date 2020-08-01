@@ -8,6 +8,7 @@ import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
+import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
@@ -37,9 +38,10 @@ class TransceiverGuiDescription(
         set(value) {
             if (value.id == currentDialog.id)
                 return
-            moddedPlayer.setCurrentEntry(bimoe, 0)
-            moddedPlayer.setCurrentDialog(bimoe, value.id)
-            ChangeDialogC2SPacket.sendToServer(bimoe, value.id)
+            if (value.id != "away") {
+                moddedPlayer.setCurrentDialog(bimoe, value.id)
+                ChangeDialogC2SPacket.sendToServer(bimoe, value.id)
+            }
             dialogBox.dialogText.entry = value.entries[0].string
             field = value
         }
@@ -96,6 +98,7 @@ class TransceiverGuiDescription(
 
         if (nextIndex < currentDialog.entries.size) {
             moddedPlayer.setCurrentEntry(bimoe, nextIndex)
+            NextEntryC2SPacket.sendToServer(bimoe)
             dialogBox.dialogText.entry = currentDialog.entries[nextIndex].string
             return
         }
