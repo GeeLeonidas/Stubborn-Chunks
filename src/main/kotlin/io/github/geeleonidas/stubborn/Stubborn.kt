@@ -24,6 +24,7 @@ fun init() {
 
     StubbornInit.registerBlocks()
     StubbornInit.registerItems()
+    StubbornInit.registerPackets()
 
     DialogManager.initialize()
 }

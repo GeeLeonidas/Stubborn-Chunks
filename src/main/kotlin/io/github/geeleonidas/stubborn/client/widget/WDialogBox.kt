@@ -4,6 +4,8 @@ import io.github.cottonmc.cotton.gui.client.BackgroundPainter
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.github.geeleonidas.stubborn.Bimoe
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 
 class WDialogBox(
     bimoe: Bimoe,
@@ -28,6 +30,7 @@ class WDialogBox(
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
     }
 
+    @Environment(EnvType.CLIENT)
     private fun onClick() {
         if (dialogText.isFinished())
             callNextEntry.invoke()
@@ -35,6 +38,7 @@ class WDialogBox(
             dialogText.finish()
     }
 
+    @Environment(EnvType.CLIENT)
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
         if (button == 0)
             onClick()

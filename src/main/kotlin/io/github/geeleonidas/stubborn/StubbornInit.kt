@@ -3,6 +3,9 @@ package io.github.geeleonidas.stubborn
 import io.github.geeleonidas.stubborn.block.TransceiverBlock
 import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
 import io.github.geeleonidas.stubborn.container.TransceiverGuiDescription
+import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
+import net.fabricmc.fabric.api.network.PacketConsumer
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntityType
@@ -12,11 +15,11 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
 
-
 object StubbornInit {
 
     private val registeredBlocks = mutableMapOf<Identifier, Block>()
     private val registeredItems = mutableMapOf<Identifier, Item>()
+    private val registeredPackets = mutableMapOf<Identifier, PacketConsumer>()
 
     val transceiverBlock = TransceiverBlock()
     val transceiverBlockEntityType = Registry.register(
@@ -31,6 +34,8 @@ object StubbornInit {
 
     fun addBlock(id: Identifier, block: Block) = registeredBlocks.putIfAbsent(id, block)
     fun addItem(id: Identifier, item: Item) = registeredItems.putIfAbsent(id, item)
+    fun addPacket(id: Identifier, packetConsumer: PacketConsumer) =
+        registeredPackets.putIfAbsent(id, packetConsumer)
 
     fun registerBlocks() {
         for (pair in registeredBlocks)
@@ -40,6 +45,12 @@ object StubbornInit {
     fun registerItems() {
         for (pair in registeredItems)
             Registry.register(Registry.ITEM, pair.key, pair.value)
+    }
+
+    fun registerPackets() {
+        ChangeDialogC2SPacket.initialize()
+        for (pair in registeredPackets)
+            ServerSidePacketRegistry.INSTANCE.register(pair.key, pair.value)
     }
 }
 
@@ -58,4 +69,10 @@ interface StubbornItem {
     val id: Identifier
 
     fun register(ref: Item) = StubbornInit.addItem(id, ref)
+}
+
+interface StubbornPacket: PacketConsumer {
+    val id: Identifier
+
+    fun register() = StubbornInit.addPacket(id, this)
 }

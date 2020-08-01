@@ -38,6 +38,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
 
     @Override
     public void setCurrentDialog(Bimoe bimoe, String value) {
+        if (value.equals("away")) return;
         currentDialog.put(bimoe, value);
     }
 
@@ -51,6 +52,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
         currentEntry.put(bimoe, value);
     }
 
+    // TODO: Use Stats instead
     @Override
     public int getDeathCount() {
         return deathCount;

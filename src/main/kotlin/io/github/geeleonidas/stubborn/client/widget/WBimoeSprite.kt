@@ -3,6 +3,8 @@ package io.github.geeleonidas.stubborn.client.widget
 import io.github.cottonmc.cotton.gui.widget.WSprite
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.client.util.math.MatrixStack
 
 class WBimoeSprite(bimoe: Bimoe):
@@ -10,6 +12,7 @@ class WBimoeSprite(bimoe: Bimoe):
 
     var visible = true
 
+    @Environment(EnvType.CLIENT)
     override fun paint(matrices: MatrixStack?, x: Int, y: Int, mouseX: Int, mouseY: Int) {
         if (!visible)
             return

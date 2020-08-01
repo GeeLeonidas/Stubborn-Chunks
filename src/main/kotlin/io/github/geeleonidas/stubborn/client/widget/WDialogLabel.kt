@@ -3,6 +3,8 @@ package io.github.geeleonidas.stubborn.client.widget
 import io.github.cottonmc.cotton.gui.widget.WLabel
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import io.github.geeleonidas.stubborn.Bimoe
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.text.LiteralText
 
 class WDialogLabel(
@@ -17,6 +19,7 @@ class WDialogLabel(
            field = value
        }
 
+    @Environment(EnvType.CLIENT)
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
         if (button == 0) // Left click
             onClick.invoke()

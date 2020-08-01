@@ -7,8 +7,11 @@ import io.github.geeleonidas.stubborn.StubbornInit
 import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
+import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.math.BlockPos
 
@@ -20,7 +23,7 @@ class TransceiverGuiDescription(
 
     private val root = WPlainPanel()
 
-    private val bimoe = Bimoe.fromBiome(world.getBiome(pos))
+    val bimoe = Bimoe.fromBiome(world.getBiome(pos))
 
     private val bimoeSprite = WBimoeSprite(bimoe)
     private val dialogBox = WDialogBox(bimoe, this::callNextEntry)
@@ -29,12 +32,14 @@ class TransceiverGuiDescription(
     private val playerEntity = playerInventory.player
     private val moddedPlayer = playerEntity as StubbornPlayer
 
+    @Environment(EnvType.CLIENT)
     private var currentDialog = DialogManager.getDialog(bimoe, playerEntity)
         set(value) {
             if (value.id == currentDialog.id)
                 return
             moddedPlayer.setCurrentEntry(bimoe, 0)
             moddedPlayer.setCurrentDialog(bimoe, value.id)
+            ChangeDialogC2SPacket.sendToServer(bimoe, value.id)
             dialogBox.dialogText.entry = value.entries[0].string
             field = value
         }
@@ -51,8 +56,9 @@ class TransceiverGuiDescription(
         )
 
         root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
-        dialogBox.dialogText.entry =
-            currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
+        if (world.isClient())
+            dialogBox.dialogText.entry =
+                currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
 
         root.validate(this)
     }
@@ -77,13 +83,14 @@ class TransceiverGuiDescription(
         }
     }
 
+    @Environment(EnvType.CLIENT)
     private fun onResponseClick(toDialogId: String) {
         responseButtons.forEach { root.remove(it) }
         responseButtons.clear()
-        moddedPlayer.setCurrentDialog(bimoe, toDialogId)
-        currentDialog = DialogManager.getDialog(bimoe, playerEntity)
+        currentDialog = DialogManager.findDialog(bimoe, toDialogId)
     }
 
+    @Environment(EnvType.CLIENT)
     private fun callNextEntry() {
         val nextIndex = moddedPlayer.getCurrentEntry(bimoe) + 1
 
@@ -95,6 +102,7 @@ class TransceiverGuiDescription(
 
         if (currentDialog.responses.isEmpty()) {
             moddedPlayer.setCurrentDialog(bimoe, "")
+            ChangeDialogC2SPacket.sendToServer(bimoe, "")
             currentDialog = DialogManager.getDialog(bimoe, playerEntity)
             return
         }

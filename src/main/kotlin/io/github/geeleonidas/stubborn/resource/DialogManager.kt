@@ -54,7 +54,7 @@ object DialogManager {
         return starterDialogs.minBy { it.dialogCondition.progressNeeded } ?: findDialog(bimoe, "away")
     }
 
-    private fun findDialog(bimoe: Bimoe, id: String) =
+    fun findDialog(bimoe: Bimoe, id: String) =
         nodeDialogs[bimoe]?.find { it.id == id } ?:
         rootDialogs[bimoe]?.find { it.id == id } ?: errorDialog
 
