@@ -9,6 +9,7 @@ import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
+import io.github.geeleonidas.stubborn.network.UpdateProgressC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
@@ -38,9 +39,13 @@ class TransceiverGuiDescription(
         set(value) {
             if (value.id == currentDialog.id)
                 return
-            if (value.id != "away") {
+            if (value.id[0] != '~') {
                 moddedPlayer.setCurrentDialog(bimoe, value.id)
                 ChangeDialogC2SPacket.sendToServer(bimoe, value.id)
+            } else if (value.id.startsWith("~progress")) {
+                val delta = if (value.id.endsWith("forward")) +1 else -1
+                moddedPlayer.updateBimoeProgress(bimoe, delta)
+                UpdateProgressC2SPacket.sendToServer(bimoe)
             }
             dialogBox.dialogText.entry = value.entries[0].string
             field = value
@@ -103,10 +108,15 @@ class TransceiverGuiDescription(
             return
         }
 
-        if (currentDialog.responses.isEmpty()) {
+        if (currentDialog.nextDialogsIds.isEmpty()) {
             moddedPlayer.setCurrentDialog(bimoe, "")
             ChangeDialogC2SPacket.sendToServer(bimoe, "")
             currentDialog = DialogManager.getDialog(bimoe, playerEntity)
+            return
+        }
+
+        if (currentDialog.nextDialogsIds.size == 1) {
+            currentDialog = DialogManager.findDialog(bimoe, currentDialog.nextDialogsIds[0])
             return
         }
 

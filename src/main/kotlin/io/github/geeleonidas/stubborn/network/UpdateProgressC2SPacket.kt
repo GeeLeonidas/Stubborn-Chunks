@@ -13,9 +13,8 @@ import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketContext
 import net.minecraft.network.PacketByteBuf
 
-
-object NextEntryC2SPacket: StubbornC2SPacket {
-    override val id = Stubborn.makeId("next_entry")
+object UpdateProgressC2SPacket: StubbornC2SPacket {
+    override val id = Stubborn.makeId("update_progress")
     init { register() }
 
     override fun accept(packetContext: PacketContext, packetByteBuf: PacketByteBuf) {
@@ -24,18 +23,28 @@ object NextEntryC2SPacket: StubbornC2SPacket {
         val bimoe = packetByteBuf.readEnumConstant(Bimoe::class.java)
         packetContext.taskQueue.execute {
             if (!transceiverGuiDescription.canUse(playerEntity) ||
-                    transceiverGuiDescription !is TransceiverGuiDescription)
+                transceiverGuiDescription !is TransceiverGuiDescription)
                 return@execute
 
             if (transceiverGuiDescription.bimoe != bimoe)
                 return@execute
 
             val moddedPlayer = playerEntity as StubbornPlayer
-            val currentIndex = moddedPlayer.getCurrentEntry(bimoe)
             val currentDialog = DialogManager.getDialog(bimoe, playerEntity)
 
-            if (currentIndex < currentDialog.entries.size - 1)
-                moddedPlayer.setCurrentEntry(bimoe, currentIndex + 1)
+            if (currentDialog.nextDialogsIds.size != 1)
+                return@execute
+
+            val isForward = currentDialog.nextDialogsIds[0] == "~progress_forward"
+            val isBackward = currentDialog.nextDialogsIds[0] == "~progress_backward"
+
+            if (!(isForward || isBackward))
+                return@execute
+
+            moddedPlayer.setCurrentDialog(bimoe, "")
+
+            val delta = if (isForward) +1 else -1
+            moddedPlayer.updateBimoeProgress(bimoe, delta)
         }
     }
 

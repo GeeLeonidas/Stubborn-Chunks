@@ -9,14 +9,24 @@
   ],
   "nodeDialogs": [
     {
-      "id": "away",
+      "id": "~away",
+      "entryListSize": 1,
+      "responses": []
+    },
+    {
+      "id": "~progress_forward",
+      "entryListSize": 1,
+      "responses": []
+    },
+    {
+      "id": "~progress_backward",
       "entryListSize": 1,
       "responses": []
     },
     {
       "id": "death_rude",
       "entryListSize": 1,
-      "responses": []
+      "responses": ["~progress_backward"]
     },
     {
       "id": "death_sincere",

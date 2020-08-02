@@ -30,18 +30,22 @@ open class NodeDialog(
             val nextDialogsIds = mutableListOf<String>()
             val responseTexts = mutableListOf<TranslatableText>()
 
-            for (response in dialogObject["responses"].asJsonArray) {
-                val responseAndPointer = response.asString.split("->")
+            val responseJsonArray = dialogObject["responses"].asJsonArray
+            if (responseJsonArray.size() != 1)
+                for (response in responseJsonArray) {
+                    val responseAndPointer = response.asString.split("->")
 
-                val responseStr = responseAndPointer.first()
-                val pointerStr = responseAndPointer.
-                    elementAtOrNull(1) ?: "${id}_${responseStr}"
+                    val responseStr = responseAndPointer.first()
+                    val pointerStr = responseAndPointer.
+                        elementAtOrNull(1) ?: "${id}_${responseStr}"
 
-                nextDialogsIds += pointerStr
-                responseTexts += TranslatableText(
-                    "response.${Stubborn.modId}.${bimoe.lowerCasedName}.$id.$responseStr"
-                )
-            }
+                    nextDialogsIds += pointerStr
+                    responseTexts += TranslatableText(
+                        "response.${Stubborn.modId}.${bimoe.lowerCasedName}.$id.$responseStr"
+                    )
+                }
+            else // One-element arrays always generate a pointer without a TranslatableText entry
+                nextDialogsIds += responseJsonArray[0].asString
 
             val entriesBimoeEffects = mutableMapOf<Int,EntryBimoeEffect>()
             val entriesTextEffects = mutableMapOf<Int,List<EntryTextEffect>>()

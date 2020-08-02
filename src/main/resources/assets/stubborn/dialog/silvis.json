@@ -9,7 +9,7 @@
   ],
   "nodeDialogs": [
     {
-      "id": "away",
+      "id": "~away",
       "entryListSize": 1,
       "responses": []
     },

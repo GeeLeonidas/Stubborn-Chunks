@@ -27,8 +27,8 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     }
 
     @Override
-    public void setBimoeProgress(Bimoe bimoe, Integer value) {
-        bimoeProgress.put(bimoe, value);
+    public void updateBimoeProgress(Bimoe bimoe, Integer delta) {
+        bimoeProgress.put(bimoe, getBimoeProgress(bimoe) + delta);
     }
 
     @Override

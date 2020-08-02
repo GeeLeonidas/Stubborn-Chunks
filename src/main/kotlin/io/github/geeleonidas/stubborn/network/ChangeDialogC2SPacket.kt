@@ -17,11 +17,11 @@ object ChangeDialogC2SPacket: StubbornC2SPacket {
     override val id = Stubborn.makeId("change_dialog")
     init { register() }
 
-    override fun accept(packetContext: PacketContext, packetBuffer: PacketByteBuf) {
+    override fun accept(packetContext: PacketContext, packetByteBuf: PacketByteBuf) {
         val transceiverGuiDescription = packetContext.player.currentScreenHandler
         val playerEntity = packetContext.player
-        val bimoe = packetBuffer.readEnumConstant(Bimoe::class.java)
-        val toDialogId = packetBuffer.readString()
+        val bimoe = packetByteBuf.readEnumConstant(Bimoe::class.java)
+        val toDialogId = packetByteBuf.readString()
         packetContext.taskQueue.execute {
             if (!transceiverGuiDescription.canUse(playerEntity) ||
                     transceiverGuiDescription !is TransceiverGuiDescription)
