@@ -26,8 +26,13 @@ object DialogManager {
         val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
         Bimoe.values().forEach { bimoe ->
             val dialogPair = loadBimoeDialogs(bimoe)
+
             starterDialogs[bimoe] = dialogPair.first
-            bimoeDialogs[bimoe] = dialogPair.second
+
+            val generatedDialogList = mutableListOf<NodeDialog>()
+            VisualDialog.values().forEach { generatedDialogList += it.generate(bimoe) }
+
+            bimoeDialogs[bimoe] = dialogPair.second + generatedDialogList
         }
         rootDialogs = starterDialogs.toMap()
         nodeDialogs = bimoeDialogs.toMap()

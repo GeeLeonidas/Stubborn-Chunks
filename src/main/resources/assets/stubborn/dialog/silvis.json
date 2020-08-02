@@ -9,11 +9,6 @@
   ],
   "nodeDialogs": [
     {
-      "id": "~away",
-      "entryListSize": 1,
-      "responses": []
-    },
-    {
       "id": "hungry1_sincere",
       "entryListSize": 2,
       "responses": []

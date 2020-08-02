@@ -9,11 +9,6 @@
   ],
   "nodeDialogs": [
     {
-      "id": "~away",
-      "entryListSize": 1,
-      "responses": []
-    },
-    {
       "id": "first_amazed",
       "entryListSize": 2,
       "responses": []
