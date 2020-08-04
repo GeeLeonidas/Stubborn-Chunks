@@ -11,7 +11,9 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketContext
+import net.minecraft.client.MinecraftClient
 import net.minecraft.network.PacketByteBuf
+import org.apache.logging.log4j.Level
 
 object ChangeDialogC2SPacket: StubbornC2SPacket {
     override val id = Stubborn.makeId("change_dialog")
@@ -57,8 +59,14 @@ object ChangeDialogC2SPacket: StubbornC2SPacket {
     }
 
     @Environment(EnvType.CLIENT)
-    fun sendToServer(bimoe: Bimoe, toDialogId: String) {
+    override fun sendToServer(bimoe: Bimoe) {
         val packetByteBuf = PacketByteBuf(Unpooled.buffer())
+        val player = MinecraftClient.getInstance().player
+        if (player !is StubbornPlayer) {
+            Stubborn.log("Player isn't valid in this ChangeDialogC2SPacket!", Level.ERROR)
+            return
+        }
+        val toDialogId = player.getCurrentDialog(bimoe)
         packetByteBuf.writeEnumConstant(bimoe)
         packetByteBuf.writeString(toDialogId)
         ClientSidePacketRegistry.INSTANCE.sendToServer(id, packetByteBuf)

@@ -5,6 +5,10 @@ import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
+import io.netty.buffer.Unpooled
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketConsumer
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
@@ -12,6 +16,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
@@ -73,4 +78,10 @@ interface StubbornC2SPacket: PacketConsumer {
     fun initialize() = Unit
     fun register() =
         ServerSidePacketRegistry.INSTANCE.register(id, this)
+    @Environment(EnvType.CLIENT)
+    fun sendToServer(bimoe: Bimoe) {
+        val packetByteBuf = PacketByteBuf(Unpooled.buffer())
+        packetByteBuf.writeEnumConstant(bimoe)
+        ClientSidePacketRegistry.INSTANCE.sendToServer(id, packetByteBuf)
+    }
 }

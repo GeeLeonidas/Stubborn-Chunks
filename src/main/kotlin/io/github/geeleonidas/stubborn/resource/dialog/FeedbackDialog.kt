@@ -3,12 +3,13 @@ package io.github.geeleonidas.stubborn.resource.dialog
 import com.google.gson.JsonObject
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryBimoeEffect
 import net.minecraft.text.TranslatableText
 
-class FeedbackDialog(id: String, entry: TranslatableText):
+open class FeedbackDialog(id: String, entry: TranslatableText):
     NodeDialog(
         id, listOf(entry), emptyList(),
-        emptyList(), emptyMap(), emptyMap()
+        emptyList(), mapOf(0 to EntryBimoeEffect.THOUGHT), emptyMap()
     ) {
     companion object {
         fun fromJsonOrNull(jsonObject: JsonObject, bimoe: Bimoe): FeedbackDialog? {

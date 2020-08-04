@@ -7,6 +7,7 @@ import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
 import io.github.geeleonidas.stubborn.resource.dialog.NodeDialog
 import io.github.geeleonidas.stubborn.resource.dialog.RootDialog
+import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.TranslatableText
@@ -26,19 +27,23 @@ object DialogManager {
     private val rootDialogs: Map<Bimoe, List<RootDialog>>
     private val nodeDialogs: Map<Bimoe, List<NodeDialog>>
     private val feedbackDialogs: Map<Bimoe, List<FeedbackDialog>>
+    private val updateDialogs: Map<Bimoe, List<UpdateDialog>>
     init {
         val starterDialogs = mutableMapOf<Bimoe, List<RootDialog>>()
         val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
         val visualDialogs = mutableMapOf<Bimoe, List<FeedbackDialog>>()
+        val packetDialogs = mutableMapOf<Bimoe, List<UpdateDialog>>()
         Bimoe.values().forEach { bimoe ->
             val dialogContainer = loadBimoeDialogs(bimoe)
             starterDialogs[bimoe] = dialogContainer.rootDialogs
             bimoeDialogs[bimoe] = dialogContainer.nodeDialogs
             visualDialogs[bimoe] = dialogContainer.feedbackDialogs
+            packetDialogs[bimoe] = dialogContainer.updateDialogs
         }
         rootDialogs = starterDialogs.toMap()
         nodeDialogs = bimoeDialogs.toMap()
         feedbackDialogs = visualDialogs.toMap()
+        updateDialogs = packetDialogs.toMap()
 
         Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)
     }
@@ -63,15 +68,16 @@ object DialogManager {
     }
 
     fun findDialog(bimoe: Bimoe, id: String) =
-        nodeDialogs[bimoe]?.find { it.id == id } ?:
+        updateDialogs[bimoe]?.find { it.id == id } ?:
         feedbackDialogs[bimoe]?.find { it.id == id } ?:
+        nodeDialogs[bimoe]?.find { it.id == id } ?:
         rootDialogs[bimoe]?.find { it.id == id } ?: generateErrorDialog.invoke(id)
 
     private fun loadBimoeDialogs(bimoe: Bimoe): DialogContainer {
         val bimoePath = Stubborn.resource("dialog/${bimoe.lowerCasedName}.json")
-        val feedbackPath = Stubborn.resource("dialog/feedback.json")
+        val globalPath = Stubborn.resource("dialog/~global.json")
         val jsonBimoeStream = javaClass.getResourceAsStream(bimoePath)
-        val jsonFeedbackStream = javaClass.getResourceAsStream(feedbackPath)
+        val jsonGlobalStream = javaClass.getResourceAsStream(globalPath)
 
         try {
             val jsonBimoeObject = jsonBimoeStream.use {
@@ -88,18 +94,25 @@ object DialogManager {
                 nodeDialogs += NodeDialog.fromJson(it.asJsonObject, bimoe)
             }
 
-            val jsonFeedbackObject = jsonFeedbackStream.use {
+            val jsonFeedbackObject = jsonGlobalStream.use {
                 Gson().fromJson(InputStreamReader(it, Charsets.UTF_8), JsonObject::class.java)
             }
+
             val feedbackDialogs = mutableListOf<FeedbackDialog>()
             jsonFeedbackObject["feedbackDialogs"].asJsonArray.forEach {
                 feedbackDialogs += FeedbackDialog.fromJsonOrNull(it.asJsonObject, bimoe) ?: return@forEach
             }
 
+            val updateDialogs = mutableListOf<UpdateDialog>()
+            jsonFeedbackObject["updateDialogs"].asJsonArray.forEach {
+                updateDialogs += UpdateDialog.fromJsonOrNull(it.asJsonObject, bimoe) ?: return@forEach
+            }
+
             return DialogContainer(
-                rootDialogs,
-                nodeDialogs,
-                feedbackDialogs
+                rootDialogs.toList(),
+                nodeDialogs.toList(),
+                feedbackDialogs.toList(),
+                updateDialogs.toList()
             )
         } catch (exception: Throwable) {
             exception.printStackTrace()

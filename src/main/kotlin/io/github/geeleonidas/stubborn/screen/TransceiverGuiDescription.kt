@@ -9,9 +9,9 @@ import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
-import io.github.geeleonidas.stubborn.network.UpdateProgressC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
+import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -42,12 +42,12 @@ class TransceiverGuiDescription(
                 return
             if (value !is FeedbackDialog) {
                 moddedPlayer.setCurrentDialog(bimoe, value.id)
-                ChangeDialogC2SPacket.sendToServer(bimoe, value.id)
-            // TODO: Do this but smoother
-            } else if (value.id.startsWith("~progress")) {
-                val delta = if (value.id.endsWith("forward")) +1 else -1
-                moddedPlayer.updateBimoeProgress(bimoe, delta)
-                UpdateProgressC2SPacket.sendToServer(bimoe)
+                ChangeDialogC2SPacket.sendToServer(bimoe)
+            } else {
+                if (value is UpdateDialog) {
+                    value.executeUpdate.invoke(bimoe, moddedPlayer)
+                    value.packet.sendToServer(bimoe)
+                }
             }
             dialogBox.dialogText.entry = value.entries[0].string
             field = value
@@ -112,7 +112,7 @@ class TransceiverGuiDescription(
 
         if (currentDialog.nextDialogsIds.isEmpty()) {
             moddedPlayer.setCurrentDialog(bimoe, "")
-            ChangeDialogC2SPacket.sendToServer(bimoe, "")
+            ChangeDialogC2SPacket.sendToServer(bimoe)
             currentDialog = DialogManager.getDialog(bimoe, playerEntity)
             return
         }

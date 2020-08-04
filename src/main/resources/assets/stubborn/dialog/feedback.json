@@ -1,7 +1,0 @@
-{
-  "feedbackDialogs": [
-    { "id": "away" },
-    { "id": "progress_forward" },
-    { "id": "progress_backward" }
-  ]
-}

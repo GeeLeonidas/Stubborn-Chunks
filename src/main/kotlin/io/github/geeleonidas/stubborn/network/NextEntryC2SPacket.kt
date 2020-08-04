@@ -40,7 +40,7 @@ object NextEntryC2SPacket: StubbornC2SPacket {
     }
 
     @Environment(EnvType.CLIENT)
-    fun sendToServer(bimoe: Bimoe) {
+    override fun sendToServer(bimoe: Bimoe) {
         val packetByteBuf = PacketByteBuf(Unpooled.buffer())
         packetByteBuf.writeEnumConstant(bimoe)
         ClientSidePacketRegistry.INSTANCE.sendToServer(id, packetByteBuf)

@@ -1,10 +1,12 @@
 package io.github.geeleonidas.stubborn.mixin;
 
 import io.github.geeleonidas.stubborn.Bimoe;
+import io.github.geeleonidas.stubborn.Stubborn;
 import io.github.geeleonidas.stubborn.util.StubbornPlayer;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +31,7 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Override
     public void updateBimoeProgress(Bimoe bimoe, Integer delta) {
         bimoeProgress.put(bimoe, getBimoeProgress(bimoe) + delta);
+        Stubborn.INSTANCE.log("MWAHAHAHAHA", Level.INFO);
     }
 
     @Override

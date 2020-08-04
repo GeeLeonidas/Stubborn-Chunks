@@ -4,12 +4,9 @@ import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
+import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
 import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
-import io.netty.buffer.Unpooled
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketContext
 import net.minecraft.network.PacketByteBuf
 
@@ -30,28 +27,14 @@ object UpdateProgressC2SPacket: StubbornC2SPacket {
                 return@execute
 
             val moddedPlayer = playerEntity as StubbornPlayer
-            val currentDialog = DialogManager.getDialog(bimoe, playerEntity)
+            val currentDialog = DialogManager.findDialog(bimoe,
+                DialogManager.getDialog(bimoe, playerEntity).nextDialogsIds[0]
+            )
 
-            if (currentDialog.nextDialogsIds.size != 1)
+            if (currentDialog !is UpdateDialog)
                 return@execute
 
-            val isForward = currentDialog.nextDialogsIds[0] == "~progress_forward"
-            val isBackward = currentDialog.nextDialogsIds[0] == "~progress_backward"
-
-            if (!(isForward || isBackward))
-                return@execute
-
-            moddedPlayer.setCurrentDialog(bimoe, "")
-
-            val delta = if (isForward) +1 else -1
-            moddedPlayer.updateBimoeProgress(bimoe, delta)
+            currentDialog.executeUpdate.invoke(bimoe, moddedPlayer)
         }
-    }
-
-    @Environment(EnvType.CLIENT)
-    fun sendToServer(bimoe: Bimoe) {
-        val packetByteBuf = PacketByteBuf(Unpooled.buffer())
-        packetByteBuf.writeEnumConstant(bimoe)
-        ClientSidePacketRegistry.INSTANCE.sendToServer(id, packetByteBuf)
     }
 }
