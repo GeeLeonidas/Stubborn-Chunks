@@ -1,4 +1,4 @@
-package io.github.geeleonidas.stubborn.resource
+package io.github.geeleonidas.stubborn.resource.dialog.component
 
 enum class EntryBimoeEffect {
 

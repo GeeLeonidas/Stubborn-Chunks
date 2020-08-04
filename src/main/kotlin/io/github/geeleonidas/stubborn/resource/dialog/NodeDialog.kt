@@ -1,8 +1,10 @@
-package io.github.geeleonidas.stubborn.resource
+package io.github.geeleonidas.stubborn.resource.dialog
 
 import com.google.gson.JsonObject
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryBimoeEffect
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryTextEffect
 import net.minecraft.text.TranslatableText
 
 open class NodeDialog(
@@ -47,7 +49,7 @@ open class NodeDialog(
             else // One-element arrays always generate a pointer without a TranslatableText entry
                 nextDialogsIds += responseJsonArray[0].asString
 
-            val entriesBimoeEffects = mutableMapOf<Int,EntryBimoeEffect>()
+            val entriesBimoeEffects = mutableMapOf<Int, EntryBimoeEffect>()
             val entriesTextEffects = mutableMapOf<Int,List<EntryTextEffect>>()
 
             if (dialogObject.has("entriesEffects"))
@@ -67,8 +69,10 @@ open class NodeDialog(
                         entriesTextEffects[entryIndex] = tempEffectList
                 }
 
-            return NodeDialog(id, entries, responseTexts,
-                nextDialogsIds, entriesBimoeEffects, entriesTextEffects)
+            return NodeDialog(
+                id, entries, responseTexts,
+                nextDialogsIds, entriesBimoeEffects, entriesTextEffects
+            )
         }
     }
 }

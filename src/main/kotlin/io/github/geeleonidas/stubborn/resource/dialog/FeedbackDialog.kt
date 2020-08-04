@@ -1,4 +1,4 @@
-package io.github.geeleonidas.stubborn.resource
+package io.github.geeleonidas.stubborn.resource.dialog
 
 import com.google.gson.JsonObject
 import io.github.geeleonidas.stubborn.Bimoe

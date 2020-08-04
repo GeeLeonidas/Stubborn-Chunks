@@ -4,6 +4,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
+import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
+import io.github.geeleonidas.stubborn.resource.dialog.NodeDialog
+import io.github.geeleonidas.stubborn.resource.dialog.RootDialog
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.TranslatableText
@@ -93,7 +96,11 @@ object DialogManager {
                 feedbackDialogs += FeedbackDialog.fromJsonOrNull(it.asJsonObject, bimoe) ?: return@forEach
             }
 
-            return DialogContainer(rootDialogs, nodeDialogs, feedbackDialogs)
+            return DialogContainer(
+                rootDialogs,
+                nodeDialogs,
+                feedbackDialogs
+            )
         } catch (exception: Throwable) {
             exception.printStackTrace()
             return DialogContainer.EMPTY

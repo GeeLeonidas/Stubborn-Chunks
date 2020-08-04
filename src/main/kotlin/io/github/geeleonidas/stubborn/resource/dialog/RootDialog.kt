@@ -1,7 +1,10 @@
-package io.github.geeleonidas.stubborn.resource
+package io.github.geeleonidas.stubborn.resource.dialog
 
 import com.google.gson.JsonObject
 import io.github.geeleonidas.stubborn.Bimoe
+import io.github.geeleonidas.stubborn.resource.dialog.component.DialogCondition
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryBimoeEffect
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryTextEffect
 import net.minecraft.text.TranslatableText
 
 class RootDialog(

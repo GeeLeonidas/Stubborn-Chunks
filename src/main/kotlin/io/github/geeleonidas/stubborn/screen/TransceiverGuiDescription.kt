@@ -11,7 +11,7 @@ import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.network.UpdateProgressC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
-import io.github.geeleonidas.stubborn.resource.FeedbackDialog
+import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment

@@ -1,4 +1,4 @@
-package io.github.geeleonidas.stubborn.resource
+package io.github.geeleonidas.stubborn.resource.dialog.component
 
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.minecraft.entity.player.PlayerEntity
