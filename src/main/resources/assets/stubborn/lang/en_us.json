@@ -1,7 +1,7 @@
 {
   "block.stubborn.transceiver": "Transceiver",
 
-  "dialog.stubborn.error": "Error 404: Dialog not found.",
+  "dialog.stubborn.error": "§4Error 404: §rDialog §5\"%s\"§r not found.",
 
 
   "dialog.stubborn.finis.~away": "§o* You look into the void and perceive a presence, but, suddenly, it vanishes.§r",

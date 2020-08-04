@@ -1,4 +1,4 @@
-package io.github.geeleonidas.stubborn.container
+package io.github.geeleonidas.stubborn.screen
 
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
@@ -11,6 +11,7 @@ import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.network.UpdateProgressC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
+import io.github.geeleonidas.stubborn.resource.FeedbackDialog
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -39,9 +40,10 @@ class TransceiverGuiDescription(
         set(value) {
             if (value.id == currentDialog.id)
                 return
-            if (value.id[0] != '~') {
+            if (value !is FeedbackDialog) {
                 moddedPlayer.setCurrentDialog(bimoe, value.id)
                 ChangeDialogC2SPacket.sendToServer(bimoe, value.id)
+            // TODO: Do this but smoother
             } else if (value.id.startsWith("~progress")) {
                 val delta = if (value.id.endsWith("forward")) +1 else -1
                 moddedPlayer.updateBimoeProgress(bimoe, delta)

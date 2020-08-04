@@ -2,9 +2,9 @@ package io.github.geeleonidas.stubborn
 
 import io.github.geeleonidas.stubborn.block.TransceiverBlock
 import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
-import io.github.geeleonidas.stubborn.container.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
+import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import net.fabricmc.fabric.api.network.PacketConsumer
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry

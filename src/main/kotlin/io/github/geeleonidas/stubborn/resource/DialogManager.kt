@@ -14,28 +14,28 @@ object DialogManager {
 
     fun initialize() {}
 
-    private val errorDialog = NodeDialog(
-        "", listOf(TranslatableText("dialog.stubborn.error")),
-        emptyList(), emptyList(), emptyMap(), emptyMap()
-    )
+    private val generateErrorDialog = { searchId: String ->
+        FeedbackDialog(
+            "error", TranslatableText("dialog.${Stubborn.modId}.error", searchId)
+        )
+    }
 
     private val rootDialogs: Map<Bimoe, List<RootDialog>>
     private val nodeDialogs: Map<Bimoe, List<NodeDialog>>
+    private val feedbackDialogs: Map<Bimoe, List<FeedbackDialog>>
     init {
         val starterDialogs = mutableMapOf<Bimoe, List<RootDialog>>()
         val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
+        val visualDialogs = mutableMapOf<Bimoe, List<FeedbackDialog>>()
         Bimoe.values().forEach { bimoe ->
-            val dialogPair = loadBimoeDialogs(bimoe)
-
-            starterDialogs[bimoe] = dialogPair.first
-
-            val generatedDialogList = mutableListOf<NodeDialog>()
-            VisualDialog.values().forEach { generatedDialogList += it.generate(bimoe) }
-
-            bimoeDialogs[bimoe] = dialogPair.second + generatedDialogList
+            val dialogContainer = loadBimoeDialogs(bimoe)
+            starterDialogs[bimoe] = dialogContainer.rootDialogs
+            bimoeDialogs[bimoe] = dialogContainer.nodeDialogs
+            visualDialogs[bimoe] = dialogContainer.feedbackDialogs
         }
         rootDialogs = starterDialogs.toMap()
         nodeDialogs = bimoeDialogs.toMap()
+        feedbackDialogs = visualDialogs.toMap()
 
         Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)
     }
@@ -61,31 +61,42 @@ object DialogManager {
 
     fun findDialog(bimoe: Bimoe, id: String) =
         nodeDialogs[bimoe]?.find { it.id == id } ?:
-        rootDialogs[bimoe]?.find { it.id == id } ?: errorDialog
+        feedbackDialogs[bimoe]?.find { it.id == id } ?:
+        rootDialogs[bimoe]?.find { it.id == id } ?: generateErrorDialog.invoke(id)
 
-    private fun loadBimoeDialogs(bimoe: Bimoe): Pair<List<RootDialog>, List<NodeDialog>> {
-        val path = Stubborn.resource("dialog/${bimoe.lowerCasedName}.json")
-        val jsonStream = javaClass.getResourceAsStream(path)
+    private fun loadBimoeDialogs(bimoe: Bimoe): DialogContainer {
+        val bimoePath = Stubborn.resource("dialog/${bimoe.lowerCasedName}.json")
+        val feedbackPath = Stubborn.resource("dialog/feedback.json")
+        val jsonBimoeStream = javaClass.getResourceAsStream(bimoePath)
+        val jsonFeedbackStream = javaClass.getResourceAsStream(feedbackPath)
 
         try {
-            val jsonObject = jsonStream.use {
+            val jsonBimoeObject = jsonBimoeStream.use {
                 Gson().fromJson(InputStreamReader(it, Charsets.UTF_8), JsonObject::class.java)
             }
 
             val rootDialogs = mutableListOf<RootDialog>()
-            jsonObject["rootDialogs"].asJsonArray.forEach {
+            jsonBimoeObject["rootDialogs"].asJsonArray.forEach {
                 rootDialogs += RootDialog.fromJson(it.asJsonObject, bimoe)
             }
 
             val nodeDialogs = mutableListOf<NodeDialog>()
-            jsonObject["nodeDialogs"].asJsonArray.forEach {
+            jsonBimoeObject["nodeDialogs"].asJsonArray.forEach {
                 nodeDialogs += NodeDialog.fromJson(it.asJsonObject, bimoe)
             }
 
-            return rootDialogs to nodeDialogs
+            val jsonFeedbackObject = jsonFeedbackStream.use {
+                Gson().fromJson(InputStreamReader(it, Charsets.UTF_8), JsonObject::class.java)
+            }
+            val feedbackDialogs = mutableListOf<FeedbackDialog>()
+            jsonFeedbackObject["feedbackDialogs"].asJsonArray.forEach {
+                feedbackDialogs += FeedbackDialog.fromJsonOrNull(it.asJsonObject, bimoe) ?: return@forEach
+            }
+
+            return DialogContainer(rootDialogs, nodeDialogs, feedbackDialogs)
         } catch (exception: Throwable) {
             exception.printStackTrace()
-            return emptyList<RootDialog>() to emptyList()
+            return DialogContainer.EMPTY
         }
     }
 }

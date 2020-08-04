@@ -3,8 +3,8 @@ package io.github.geeleonidas.stubborn.network
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornC2SPacket
-import io.github.geeleonidas.stubborn.container.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.resource.DialogManager
+import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import io.netty.buffer.Unpooled
 import net.fabricmc.api.EnvType

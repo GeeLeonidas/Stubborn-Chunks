@@ -3,7 +3,7 @@ package io.github.geeleonidas.stubborn.client
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornInit
-import io.github.geeleonidas.stubborn.container.TransceiverGuiDescription
+import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
