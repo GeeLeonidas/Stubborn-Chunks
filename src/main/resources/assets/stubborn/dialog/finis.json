@@ -11,7 +11,7 @@
     {
       "id": "death_rude",
       "entryListSize": 1,
-      "responses": ["~progress_backward"]
+      "responses": ["~no_progress"]
     },
     {
       "id": "death_sincere",

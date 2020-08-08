@@ -9,6 +9,7 @@ import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
+import io.github.geeleonidas.stubborn.network.UpdatePlayerC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
 import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
@@ -45,8 +46,8 @@ class TransceiverGuiDescription(
                 ChangeDialogC2SPacket.sendToServer(bimoe)
             } else {
                 if (value is UpdateDialog) {
-                    value.executeUpdate.invoke(bimoe, moddedPlayer)
-                    value.packet.sendToServer(bimoe)
+                    value.playerUpdate.execute(bimoe, moddedPlayer)
+                    UpdatePlayerC2SPacket.sendToServer(bimoe)
                 }
             }
             dialogBox.dialogText.entry = value.entries[0].string

@@ -10,7 +10,7 @@ import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.fabric.api.network.PacketContext
 import net.minecraft.network.PacketByteBuf
 
-object UpdateProgressC2SPacket: StubbornC2SPacket {
+object UpdatePlayerC2SPacket: StubbornC2SPacket {
     override val id = Stubborn.makeId("update_progress")
     init { register() }
 
@@ -26,15 +26,19 @@ object UpdateProgressC2SPacket: StubbornC2SPacket {
             if (transceiverGuiDescription.bimoe != bimoe)
                 return@execute
 
-            val moddedPlayer = playerEntity as StubbornPlayer
-            val currentDialog = DialogManager.findDialog(bimoe,
-                DialogManager.getDialog(bimoe, playerEntity).nextDialogsIds[0]
-            )
-
-            if (currentDialog !is UpdateDialog)
+            val currentDialog = DialogManager.getDialog(bimoe, playerEntity)
+            if (currentDialog.nextDialogsIds.isEmpty())
                 return@execute
 
-            currentDialog.executeUpdate.invoke(bimoe, moddedPlayer)
+            val nextDialog = DialogManager.findDialog(bimoe,
+                currentDialog.nextDialogsIds.first()
+            )
+
+            if (nextDialog !is UpdateDialog)
+                return@execute
+
+            val moddedPlayer = playerEntity as StubbornPlayer
+            nextDialog.playerUpdate.execute(bimoe, moddedPlayer)
         }
     }
 }

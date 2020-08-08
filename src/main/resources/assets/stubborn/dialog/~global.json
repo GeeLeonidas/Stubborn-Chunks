@@ -1,9 +1,9 @@
 {
   "feedbackDialogs": [
-    { "id": "away" }
+    { "id": "away" },
+    { "id": "no_progress" }
   ],
   "updateDialogs": [
-    { "id": "progress_forward", "packet": "PROGRESS_FORWARD" },
-    { "id": "progress_backward", "packet": "PROGRESS_BACKWARD" }
+    { "id": "progress_forward", "packet": "PROGRESS_FORWARD" }
   ]
 }
