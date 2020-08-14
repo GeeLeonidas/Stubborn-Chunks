@@ -1,19 +1,11 @@
 package io.github.geeleonidas.stubborn.screen
 
-import io.github.cottonmc.cotton.gui.widget.WPlainPanel
-import io.github.geeleonidas.stubborn.Bimoe
-import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
-import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
-import io.github.geeleonidas.stubborn.network.UpdatePlayerC2SPacket
+import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
-import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
-import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
-import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.util.math.BlockPos
 
@@ -21,54 +13,67 @@ class TransceiverGuiDescription(
     syncId: Int,
     playerInventory: PlayerInventory,
     pos: BlockPos
-): AbstractTransceiverGuiDescription(syncId, playerInventory) {
-
-    override val root = WPlainPanel()
-
-    override val bimoe = Bimoe.fromBiome(world.getBiome(pos))
-
-    override val bimoeSprite = WBimoeSprite(bimoe)
-    override val dialogBox = WDialogBox(bimoe, this::callNextEntry)
-    override val responseButtons = mutableListOf<WResponseButton>()
-
-    override val playerEntity: PlayerEntity = playerInventory.player
-    override val moddedPlayer = playerEntity as StubbornPlayer
-
-    @Environment(EnvType.CLIENT)
-    override var currentDialog = DialogManager.getDialog(bimoe, playerEntity)
-        set(value) {
-            if (value.id == currentDialog.id)
-                return
-            if (value !is FeedbackDialog) {
-                moddedPlayer.setCurrentDialog(bimoe, value.id)
-                ChangeDialogC2SPacket.sendToServer(bimoe)
-            } else {
-                if (value is UpdateDialog) {
-                    value.playerUpdate.execute(bimoe, moddedPlayer)
-                    UpdatePlayerC2SPacket.sendToServer(bimoe)
-                }
-            }
-            dialogBox.dialogText.entry = value.entries[0].string
-            field = value
-        }
+): AbstractTransceiverGuiDescription(syncId, playerInventory, pos) {
 
     init {
-        setRootPanel(root)
-        root.setSize(400, 320)
+        this.dialogBox.setCallNextEntry(this::callNextEntry)
+        this.setRootPanel(this.root)
+        this.root.validate(this)
+    }
 
-        val offsetY = 35
+    @Environment(EnvType.CLIENT)
+    private fun generateResponses() {
+        val responses = currentDialog.responses
+        val nextDialogsIds = currentDialog.nextDialogsIds
 
-        root.add(bimoeSprite,
-            (root.width - bimoeSprite.width) / 2,
-            root.height / 2 - bimoeSprite.height + offsetY
-        )
+        val buttonSizeX = 320
+        val gapSizeY = 10
+        val offsetY = -25
+        val totalSizeY = gapSizeY * responses.size + 20 * responses.size
 
-        root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
-        if (world.isClient())
-            dialogBox.dialogText.entry =
-                currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
+        for (i in responses.indices) {
+            val button = WResponseButton(responses[i]) { onResponseClick(nextDialogsIds[i]) }
+            responseButtons += button
+            root.add(button,
+                (root.width - buttonSizeX) / 2,
+                (root.height - totalSizeY) / 2 + (gapSizeY * i + 20 * i) + offsetY,
+                buttonSizeX, 20
+            )
+        }
+    }
 
-        root.validate(this)
+    @Environment(EnvType.CLIENT)
+    private fun onResponseClick(toDialogId: String) {
+        responseButtons.forEach { root.remove(it) }
+        responseButtons.clear()
+        currentDialog = DialogManager.findDialog(bimoe, toDialogId)
+    }
+
+    @Environment(EnvType.CLIENT)
+    override fun callNextEntry() {
+        val nextIndex = moddedPlayer.getCurrentEntry(bimoe) + 1
+
+        if (nextIndex < currentDialog.entries.size) {
+            moddedPlayer.setCurrentEntry(bimoe, nextIndex)
+            NextEntryC2SPacket.sendToServer(bimoe)
+            dialogBox.dialogText.entry = currentDialog.entries[nextIndex].string
+            return
+        }
+
+        if (currentDialog.nextDialogsIds.isEmpty()) {
+            moddedPlayer.setCurrentDialog(bimoe, "")
+            ChangeDialogC2SPacket.sendToServer(bimoe)
+            currentDialog = DialogManager.getDialog(bimoe, playerEntity)
+            return
+        }
+
+        if (currentDialog.nextDialogsIds.size == 1) {
+            currentDialog = DialogManager.findDialog(bimoe, currentDialog.nextDialogsIds[0])
+            return
+        }
+
+        if (responseButtons.isEmpty())
+            generateResponses()
     }
 
     override fun addPainters() {}

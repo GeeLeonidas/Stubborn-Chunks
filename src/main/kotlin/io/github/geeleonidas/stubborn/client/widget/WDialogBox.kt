@@ -8,12 +8,14 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 
 class WDialogBox(
-    bimoe: Bimoe,
-    private val callNextEntry: () -> Unit
+    bimoe: Bimoe
 ): WPlainPanel() {
 
     val dialogLabel: WDialogLabel
     val dialogText: WDialogText
+
+    @Environment(EnvType.CLIENT)
+    private var callNextEntry = {}
 
     init {
         val dialogSizeX = 180
@@ -29,6 +31,10 @@ class WDialogBox(
         dialogText = WDialogText(this::onClick)
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
     }
+
+    @Environment(EnvType.CLIENT)
+    fun setCallNextEntry(nextEntryLambda: () -> Unit) =
+        this::callNextEntry.set(nextEntryLambda)
 
     @Environment(EnvType.CLIENT)
     private fun onClick() {
