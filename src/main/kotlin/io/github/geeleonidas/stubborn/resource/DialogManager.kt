@@ -70,8 +70,7 @@ object DialogManager {
     fun findDialog(bimoe: Bimoe, id: String) =
         updateDialogs[bimoe]?.find { it.id == id } ?:
         feedbackDialogs[bimoe]?.find { it.id == id } ?:
-        nodeDialogs[bimoe]?.find { it.id == id } ?:
-        rootDialogs[bimoe]?.find { it.id == id } ?: generateErrorDialog.invoke(id)
+        nodeDialogs[bimoe]?.find { it.id == id } ?: generateErrorDialog.invoke(id)
 
     private fun loadBimoeDialogs(bimoe: Bimoe): DialogContainer {
         val bimoePath = Stubborn.resource("dialog/${bimoe.lowerCasedName}.json")

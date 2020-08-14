@@ -4,6 +4,7 @@ import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.StubbornC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
+import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
 import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import io.netty.buffer.Unpooled
@@ -51,6 +52,10 @@ object ChangeDialogC2SPacket: StubbornC2SPacket {
                 moddedPlayer.setCurrentDialog(bimoe, "")
                 return@execute
             }
+
+            // Fail-proof for changing the dialogId to some FeedbackDialog
+            if (DialogManager.findDialog(bimoe, toDialogId) is FeedbackDialog)
+                return@execute
 
             // Following a response pointer resolves in this
             if (currentDialog.nextDialogsIds.contains(toDialogId))
