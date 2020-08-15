@@ -2,6 +2,7 @@ package io.github.geeleonidas.stubborn.client.widget
 
 import io.github.cottonmc.cotton.gui.widget.WText
 import io.github.cottonmc.cotton.gui.widget.WWidget
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryTextEffect
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.text.LiteralText
@@ -16,10 +17,37 @@ class WDialogText(
             actualIndex = 0
             timeAnchor = System.currentTimeMillis()
             this.setText(LiteralText(""))
-            field = value
+
+            if (textEffectList.isNotEmpty()) {
+                val startList = mutableListOf<Int>()
+                val rangeList = mutableListOf<IntRange>()
+
+                value.forEachIndexed { index, c ->
+                    if (c == '[')
+                        startList += index
+                    else if (c == ']') {
+                        rangeList += startList.last() until index-1
+                        startList.removeAt(startList.lastIndex)
+                    }
+                }
+
+                sectorList = rangeList.toList()
+            }
+            else
+                sectorList = emptyList()
+
+            field = value.filterNot { it == '[' || it == ']' }
         }
+
+    @Environment(EnvType.CLIENT)
+    var textEffectList = emptyList<EntryTextEffect>()
+
+    @Environment(EnvType.CLIENT)
+    private var sectorList = emptyList<IntRange>()
+
     @Environment(EnvType.CLIENT)
     private var actualIndex = 0
+
     @Environment(EnvType.CLIENT)
     private var timeAnchor = System.currentTimeMillis()
 
@@ -28,6 +56,7 @@ class WDialogText(
         this.setText(LiteralText(entry))
         actualIndex = entry.length
     }
+
     @Environment(EnvType.CLIENT)
     fun isFinished() = (actualIndex >= entry.length)
 

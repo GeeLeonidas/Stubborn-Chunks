@@ -13,7 +13,8 @@ object Stubborn {
     val modItemGroup: ItemGroup = ItemGroup.MISC
     private val logger = LogManager.getLogger()
 
-    fun log(msg: String, level: Level = Level.INFO) = logger.log(level, "[$modName] $msg")
+    fun log(msg: Any, level: Level = Level.INFO) =
+        logger.log(level, "[$modName] $msg")
     fun makeId(id: String) = Identifier(modId, id)
     fun resource(path: String) = "/assets/$modId/$path"
 }

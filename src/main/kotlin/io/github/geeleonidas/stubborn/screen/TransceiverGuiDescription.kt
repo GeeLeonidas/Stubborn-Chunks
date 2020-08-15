@@ -17,7 +17,10 @@ class TransceiverGuiDescription(
 ): AbstractTransceiverGuiDescription(syncId, playerInventory, pos) {
 
     init {
-        this.dialogBox.setCallNextEntry(this::callNextEntry)
+        if (world.isClient) {
+            this.dialogBox.setCallNextEntry(this::callNextEntry)
+            applyEntryEffects(0)
+        }
         this.setRootPanel(this.root)
         this.root.validate(this)
     }
@@ -54,6 +57,9 @@ class TransceiverGuiDescription(
     override fun applyEntryEffects(nextIndex: Int) {
         (currentDialog.entriesBimoeEffects[nextIndex] ?: EntryBimoeEffect.DEFAULT)
             .apply(bimoe, bimoeSprite, dialogBox)
+
+        dialogBox.dialogText.textEffectList =
+            currentDialog.entriesTextEffects[nextIndex] ?: emptyList()
     }
 
     @Environment(EnvType.CLIENT)

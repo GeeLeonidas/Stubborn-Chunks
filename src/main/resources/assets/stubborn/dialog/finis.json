@@ -20,8 +20,12 @@
     },
     {
       "id": "death_sarcastic",
-      "entryListSize": 2,
-      "responses": []
+      "entryListSize": 3,
+      "responses": [],
+      "entriesEffects": {
+        "2": ["DEFAULT", "SLOW_WRITING"],
+        "3": ["SURPRISED", "FAST_WRITING"]
+      }
     }
   ]
 }

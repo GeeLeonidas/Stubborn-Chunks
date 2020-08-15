@@ -1,7 +1,6 @@
 package io.github.geeleonidas.stubborn.resource.dialog.component
 
 import io.github.geeleonidas.stubborn.Bimoe
-import io.github.geeleonidas.stubborn.Stubborn
 import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 
@@ -23,7 +22,6 @@ enum class EntryBimoeEffect(
         // Visible settings
         bimoeSprite.visible = setVisibleTo
         dialogBox.dialogLabel.visible = setVisibleTo
-        Stubborn.log("$setVisibleTo")
         // Lambda call
         lambdaBimoeEffect.invoke(bimoe, bimoeSprite, dialogBox)
     }
