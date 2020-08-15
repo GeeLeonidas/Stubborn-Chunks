@@ -50,8 +50,9 @@ abstract class AbstractTransceiverGuiDescription(
                     UpdatePlayerC2SPacket.sendToServer(bimoe)
                 }
             }
-            dialogBox.dialogText.entry = value.entries[0].string
             field = value
+            applyEntryEffects(0)
+            dialogBox.dialogText.entry = value.entries[0].string
         }
 
     init {
@@ -70,6 +71,7 @@ abstract class AbstractTransceiverGuiDescription(
                 currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
     }
 
+    protected abstract fun applyEntryEffects(nextIndex: Int)
     protected abstract fun callNextEntry()
 
 }

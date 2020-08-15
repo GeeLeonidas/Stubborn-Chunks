@@ -4,6 +4,7 @@ import io.github.geeleonidas.stubborn.client.widget.WResponseButton
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryBimoeEffect
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.entity.player.PlayerInventory
@@ -50,12 +51,19 @@ class TransceiverGuiDescription(
     }
 
     @Environment(EnvType.CLIENT)
+    override fun applyEntryEffects(nextIndex: Int) {
+        (currentDialog.entriesBimoeEffects[nextIndex] ?: EntryBimoeEffect.DEFAULT)
+            .apply(bimoe, bimoeSprite, dialogBox)
+    }
+
+    @Environment(EnvType.CLIENT)
     override fun callNextEntry() {
         val nextIndex = moddedPlayer.getCurrentEntry(bimoe) + 1
 
         if (nextIndex < currentDialog.entries.size) {
             moddedPlayer.setCurrentEntry(bimoe, nextIndex)
             NextEntryC2SPacket.sendToServer(bimoe)
+            applyEntryEffects(nextIndex)
             dialogBox.dialogText.entry = currentDialog.entries[nextIndex].string
             return
         }

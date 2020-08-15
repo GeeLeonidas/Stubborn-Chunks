@@ -1,7 +1,31 @@
 package io.github.geeleonidas.stubborn.resource.dialog.component
 
-enum class EntryBimoeEffect {
+import io.github.geeleonidas.stubborn.Bimoe
+import io.github.geeleonidas.stubborn.Stubborn
+import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
+import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 
-    THOUGHT, HAPPY, SAD, ANGRY, SURPRISED
+enum class EntryBimoeEffect(
+    private val lambdaBimoeEffect: (Bimoe, WBimoeSprite, WDialogBox) -> Unit = { _,_,_ -> },
+    private val setVisibleTo: Boolean = true
+) {
+
+    DEFAULT,
+    THOUGHT(setVisibleTo = false),
+    HAPPY,
+    SAD,
+    ANGRY,
+    SURPRISED
+
+    ;
+
+    fun apply(bimoe: Bimoe, bimoeSprite: WBimoeSprite, dialogBox: WDialogBox) {
+        // Visible settings
+        bimoeSprite.visible = setVisibleTo
+        dialogBox.dialogLabel.visible = setVisibleTo
+        Stubborn.log("$setVisibleTo")
+        // Lambda call
+        lambdaBimoeEffect.invoke(bimoe, bimoeSprite, dialogBox)
+    }
 
 }
