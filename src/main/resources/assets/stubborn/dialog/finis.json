@@ -23,8 +23,9 @@
       "entryListSize": 3,
       "responses": [],
       "entriesEffects": {
-        "2": ["DEFAULT", "SLOW_WRITING"],
-        "3": ["SURPRISED", "FAST_WRITING"]
+        "1": ["SURPRISED", "SLOW_WRITING", "SPELLING"],
+        "2": ["DEFAULT", "SLOW_WRITING", "SPELLING"],
+        "3": ["SURPRISED"]
       }
     }
   ]

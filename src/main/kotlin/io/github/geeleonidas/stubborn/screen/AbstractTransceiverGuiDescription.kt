@@ -66,9 +66,15 @@ abstract class AbstractTransceiverGuiDescription(
         )
 
         root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
-        if (world.isClient())
+        if (world.isClient()) {
+            val entryIndex = moddedPlayer.getCurrentEntry(bimoe)
+
+            dialogBox.dialogText.textEffectList =
+                currentDialog.entriesTextEffects[entryIndex] ?: emptyList()
+
             dialogBox.dialogText.entry =
-                currentDialog.entries[moddedPlayer.getCurrentEntry(bimoe)].string
+                currentDialog.entries[entryIndex].string
+        }
     }
 
     protected abstract fun applyEntryEffects(nextIndex: Int)

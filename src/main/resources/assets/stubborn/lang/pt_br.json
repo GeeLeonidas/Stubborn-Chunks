@@ -19,9 +19,9 @@
   "dialog.stubborn.finis.death_sincere.1": "Ah, espera. Agora eu lembro exatamente quem você é.",
   "dialog.stubborn.finis.death_sincere.2": "Você é aquele que nega ser ceifado.",
 
-  "dialog.stubborn.finis.death_sarcastic.1": "Mas isso é impossível... Como o fim da existência, as pessoas não podem simplesmente me imaginar.",
-  "dialog.stubborn.finis.death_sarcastic.2": "[Ah, espera.]",
-  "dialog.stubborn.finis.death_sarcastic.3": "[Isso foi uma cantada?!]",
+  "dialog.stubborn.finis.death_sarcastic.1": "Mas isso é [impossível][...] Como o fim da existência, as pessoas não podem simplesmente me imaginar.",
+  "dialog.stubborn.finis.death_sarcastic.2": "[Ah,][ espera.]",
+  "dialog.stubborn.finis.death_sarcastic.3": "Isso foi uma cantada?!",
 
 
   "dialog.stubborn.silvis.away": "§o* Subitamente, você começa a sentir saudade. Você olha para os lados e não vê ninguém, mas este sentimento certamente te conforta.§r"
