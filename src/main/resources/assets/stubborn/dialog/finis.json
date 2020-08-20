@@ -25,7 +25,7 @@
       "entriesEffects": {
         "1": ["SURPRISED", "SLOW_WRITING", "SPELLING"],
         "2": ["DEFAULT", "SLOW_WRITING", "SPELLING"],
-        "3": ["SURPRISED"]
+        "3": ["SURPRISED", "FAST_WRITING"]
       }
     }
   ]

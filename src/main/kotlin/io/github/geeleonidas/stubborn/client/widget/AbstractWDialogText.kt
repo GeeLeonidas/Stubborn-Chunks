@@ -14,7 +14,7 @@ abstract class AbstractWDialogText(
     var entry = ""
         set(value) {
             actualIndex = 0
-            timeAnchor = System.currentTimeMillis()
+            timeAnchor = 0L
             this.setText(LiteralText(""))
 
             if (textEffectList.isNotEmpty()) {
@@ -51,7 +51,7 @@ abstract class AbstractWDialogText(
     protected var actualIndex = 0
 
     @Environment(EnvType.CLIENT)
-    protected var timeAnchor = System.currentTimeMillis()
+    protected var timeAnchor = 0L
 
     @Environment(EnvType.CLIENT)
     override fun onMouseUp(x: Int, y: Int, button: Int): WWidget {
