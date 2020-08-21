@@ -12,6 +12,7 @@ import io.github.geeleonidas.stubborn.network.UpdatePlayerC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.resource.dialog.FeedbackDialog
 import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
+import io.github.geeleonidas.stubborn.resource.dialog.component.EntryBimoeEffect
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -51,8 +52,7 @@ abstract class AbstractTransceiverGuiDescription(
                 }
             }
             field = value
-            applyEntryEffects(0)
-            dialogBox.dialogText.entry = value.entries[0].string
+            updateEntry(0)
         }
 
     init {
@@ -66,18 +66,23 @@ abstract class AbstractTransceiverGuiDescription(
         )
 
         root.add(dialogBox, (root.width - dialogBox.width) / 2, root.height / 2 + offsetY)
-        if (world.isClient()) {
-            val entryIndex = moddedPlayer.getCurrentEntry(bimoe)
 
-            dialogBox.dialogText.textEffectList =
-                currentDialog.entriesTextEffects[entryIndex] ?: emptyList()
-
-            dialogBox.dialogText.entry =
-                currentDialog.entries[entryIndex].string
-        }
+        if (world.isClient())
+            updateEntry(moddedPlayer.getCurrentEntry(bimoe))
     }
 
-    protected abstract fun applyEntryEffects(nextIndex: Int)
+    @Environment(EnvType.CLIENT)
+    protected fun updateEntry(nextIndex: Int) {
+        (currentDialog.entriesBimoeEffects[nextIndex] ?: EntryBimoeEffect.DEFAULT)
+            .apply(bimoe, bimoeSprite, dialogBox)
+
+        dialogBox.dialogText.textEffectList =
+            currentDialog.entriesTextEffects[nextIndex] ?: emptyList()
+
+        dialogBox.dialogText.entry =
+            currentDialog.entries[nextIndex].string
+    }
+
     protected abstract fun callNextEntry()
 
 }

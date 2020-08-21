@@ -18,6 +18,9 @@ class WDialogText(
     var isTypingSoundMuted = false
 
     @Environment(EnvType.CLIENT)
+    private val bimoeTypingSound = bimoe.typingSound
+
+    @Environment(EnvType.CLIENT)
     private val bimoeTypingDelay = bimoe.typingDelay
 
     @Environment(EnvType.CLIENT)
@@ -26,7 +29,7 @@ class WDialogText(
     @Environment(EnvType.CLIENT)
     private fun playTypingSound() =
         MinecraftClient.getInstance().player?.playSound(
-            SoundEvents.BLOCK_GLASS_STEP, SoundCategory.VOICE, 0.8f, 1f
+            bimoeTypingSound, SoundCategory.VOICE, 0.8f, 1f
         )
 
     @Environment(EnvType.CLIENT)
