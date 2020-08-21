@@ -5,9 +5,20 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.biome.Biome
 
-enum class Bimoe(private val formatting: Formatting) {
-    SILVIS(Formatting.DARK_GREEN), FINIS(Formatting.BLACK), SORBIRE(Formatting.DARK_PURPLE),
-    ERIMOS(Formatting.GOLD), LAVINA(Formatting.DARK_BLUE), MANAMI(Formatting.DARK_AQUA);
+enum class Bimoe(
+    private val formatting: Formatting,
+    val typingDelay: Int = 40
+) {
+
+    SILVIS(Formatting.DARK_GREEN),
+    FINIS(Formatting.BLACK, 45),
+    SORBIRE(Formatting.DARK_PURPLE, 35),
+
+    ERIMOS(Formatting.GOLD,30),
+    LAVINA(Formatting.DARK_BLUE, 50),
+    MANAMI(Formatting.DARK_AQUA)
+
+    ;
 
     val lowerCasedName =
         this.name.toLowerCase()

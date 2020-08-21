@@ -28,7 +28,7 @@ class WDialogBox(
         dialogLabel = WDialogLabel(bimoe, this::onClick)
         add(dialogLabel, 0, 0)
 
-        dialogText = WDialogText(this::onClick)
+        dialogText = WDialogText(bimoe, this::onClick)
         add(dialogText, 0, textOffsetY, dialogSizeX, dialogSizeY - textOffsetY)
     }
 

@@ -20,13 +20,16 @@ abstract class AbstractWDialogText(
             if (textEffectList.isNotEmpty()) {
                 val startList = mutableListOf<Int>()
                 val rangeList = mutableListOf<IntRange>()
+                var offset = 0
 
+                // TODO: Implement sub-sectors
                 value.forEachIndexed { charIndex, char ->
                     if (char == '[')
                         startList += charIndex
                     else if (char == ']') {
-                        rangeList += startList.last() until charIndex-1
+                        rangeList += startList.last()-offset until charIndex-offset-1
                         startList.removeAt(startList.lastIndex)
+                        offset += 2
                     }
                 }
 

@@ -6,11 +6,11 @@ import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 
 enum class EntryBimoeEffect(
     private val lambdaBimoeEffect: (Bimoe, WBimoeSprite, WDialogBox) -> Unit = { _,_,_ -> },
-    private val setVisibleTo: Boolean = true
+    private val isAway: Boolean = false
 ) {
 
     DEFAULT,
-    THOUGHT(setVisibleTo = false),
+    THOUGHT(isAway = true),
     HAPPY,
     SAD,
     ANGRY,
@@ -20,8 +20,9 @@ enum class EntryBimoeEffect(
 
     fun apply(bimoe: Bimoe, bimoeSprite: WBimoeSprite, dialogBox: WDialogBox) {
         // Visible settings
-        bimoeSprite.visible = setVisibleTo
-        dialogBox.dialogLabel.visible = setVisibleTo
+        bimoeSprite.visible = !isAway
+        dialogBox.dialogLabel.visible = !isAway
+        dialogBox.dialogText.isTypingSoundMuted = isAway
         // Lambda call
         lambdaBimoeEffect.invoke(bimoe, bimoeSprite, dialogBox)
     }

@@ -1,19 +1,33 @@
 package io.github.geeleonidas.stubborn.client.widget
 
+import io.github.geeleonidas.stubborn.Bimoe
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.LiteralText
 
 class WDialogText(
+    bimoe: Bimoe,
     onClick: () -> Unit
 ): AbstractWDialogText(onClick) {
 
     @Environment(EnvType.CLIENT)
-    private val bimoeTypingDelay = 40
+    var isTypingSoundMuted = false
+
+    @Environment(EnvType.CLIENT)
+    private val bimoeTypingDelay = bimoe.typingDelay
 
     @Environment(EnvType.CLIENT)
     private var typingFactor = 1f
+
+    @Environment(EnvType.CLIENT)
+    private fun playTypingSound() =
+        MinecraftClient.getInstance().player?.playSound(
+            SoundEvents.BLOCK_GLASS_STEP, SoundCategory.VOICE, 0.8f, 1f
+        )
 
     @Environment(EnvType.CLIENT)
     fun finish() {
@@ -47,10 +61,15 @@ class WDialogText(
 
             this.setText(LiteralText(newString))
 
+            if (!isTypingSoundMuted && actualLetter != ' ')
+                playTypingSound()
+
             typingFactor = 1f
             sectorList.forEachIndexed { sectorIndex, sector ->
-                if (sector.contains(actualIndex + 1))
-                    typingFactor *= textEffectList[sectorIndex].typingModifier
+                if (sector.contains(actualIndex + 1)) {
+                    val effect = textEffectList[sectorIndex]
+                    typingFactor *= effect.typingModifier
+                }
             }
         }
     }
