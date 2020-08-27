@@ -8,7 +8,7 @@ import net.fabricmc.api.Environment
 import net.minecraft.client.util.math.MatrixStack
 
 class WBimoeSprite(bimoe: Bimoe):
-    WSprite(Stubborn.makeId("textures/bimoe/${bimoe.lowerCasedName}.png")) {
+    WSprite(Stubborn.makeId("textures/bimoe/${bimoe.lowerCasedName}/default.png")) {
 
     var visible = true
 

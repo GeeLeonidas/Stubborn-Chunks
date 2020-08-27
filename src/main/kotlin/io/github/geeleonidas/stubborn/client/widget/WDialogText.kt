@@ -6,7 +6,6 @@ import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
 import net.minecraft.text.LiteralText
 
 class WDialogText(
@@ -69,7 +68,7 @@ class WDialogText(
 
             typingFactor = 1f
             sectorList.forEachIndexed { sectorIndex, sector ->
-                if (sector.contains(actualIndex + 1)) {
+                if (sector.contains(actualIndex)) {
                     val effect = textEffectList[sectorIndex]
                     typingFactor *= effect.typingModifier
                 }

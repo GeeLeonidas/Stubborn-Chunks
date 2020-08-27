@@ -18,11 +18,18 @@ enum class EntryBimoeEffect(
 
     ;
 
+    val lowerCasedName = this.name.toLowerCase()
+
     fun apply(bimoe: Bimoe, bimoeSprite: WBimoeSprite, dialogBox: WDialogBox) {
         // Visible settings
         bimoeSprite.visible = !isAway
         dialogBox.dialogLabel.visible = !isAway
         dialogBox.dialogText.isTypingSoundMuted = isAway
+
+        // Sprite settings
+        if (!isAway)
+            bimoeSprite.setImage(bimoe.makeTextureId(lowerCasedName))
+
         // Lambda call
         lambdaBimoeEffect.invoke(bimoe, bimoeSprite, dialogBox)
     }

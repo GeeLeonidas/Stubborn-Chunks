@@ -29,6 +29,10 @@ enum class Bimoe(
         lowerCasedName.capitalize()
     val formattedName: Text =
         LiteralText(capitalizedName).formatted(this.formatting)
+
+    fun makeTextureId(textureName: String) =
+        Stubborn.makeId("textures/bimoe/$lowerCasedName/$textureName.png")
+
     fun makeCompoundTagKey(key: String) =
         "${this.name}_${key.toUpperCase()}"
 
