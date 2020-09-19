@@ -6,6 +6,9 @@ public interface StubbornPlayer {
     int getBimoeProgress(Bimoe bimoe);
     void updateBimoeProgress(Bimoe bimoe, Integer delta);
 
+    String getCurrentAwayDialog(Bimoe bimoe);
+    void setCurrentAwayDialog(Bimoe bimoe, String value);
+
     String getCurrentDialog(Bimoe bimoe);
     void setCurrentDialog(Bimoe bimoe, String value);
 

@@ -8,27 +8,28 @@ import net.minecraft.text.TranslatableText
 
 open class FeedbackDialog(id: String, entry: TranslatableText):
     NodeDialog(
-        id, listOf(entry), emptyList(),
-        emptyList(), mapOf(0 to EntryBimoeEffect.THOUGHT), emptyMap()
+        id, listOf(entry), emptyList(), emptyList(),
+        mapOf(0 to EntryBimoeEffect.THOUGHT), emptyMap(),
+        null
     ) {
     companion object {
         fun fromJsonOrNull(jsonObject: JsonObject, bimoe: Bimoe): FeedbackDialog? {
-            val hasInclude = jsonObject.has("include")
+            val hasOnlyFor = jsonObject.has("onlyFor")
             val hasExclude = jsonObject.has("exclude")
-            if (hasInclude || hasExclude) {
+            if (hasOnlyFor xor hasExclude) {
                 val jsonArray =
-                    if (hasInclude)
-                        jsonObject["include"].asJsonArray
+                    if (hasOnlyFor)
+                        jsonObject["onlyFor"].asJsonArray
                     else
                         jsonObject["exclude"].asJsonArray
-                var hasElement = hasExclude // false when using "include", true when using "exclude"
+                var hasOccurrence = hasExclude // false when using "onlyFor", true when using "exclude"
                 for (i in 0 until jsonArray.size())
                     if (jsonArray[i].asString == bimoe.name) {
-                        hasElement = !hasElement
-                        break
+                        hasOccurrence = !hasOccurrence
+                        break // If there is an occurrence, invert "hasOccurrence" and then break the loop
                     }
-                if (!hasElement)
-                    return null
+                if (!hasOccurrence)
+                    return null // Invalid Bimoe for this FeedbackDialog
             }
 
             val id = "~${jsonObject["id"].asString}"

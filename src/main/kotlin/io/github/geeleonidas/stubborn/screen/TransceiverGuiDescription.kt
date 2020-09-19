@@ -52,6 +52,9 @@ class TransceiverGuiDescription(
 
     @Environment(EnvType.CLIENT)
     override fun callNextEntry() {
+        if (responseButtons.isNotEmpty())
+            return
+
         val nextIndex = moddedPlayer.getCurrentEntry(bimoe) + 1
 
         if (nextIndex < currentDialog.entries.size) {
@@ -74,8 +77,7 @@ class TransceiverGuiDescription(
             return
         }
 
-        if (responseButtons.isEmpty())
-            generateResponses()
+        generateResponses()
     }
 
     override fun addPainters() {}

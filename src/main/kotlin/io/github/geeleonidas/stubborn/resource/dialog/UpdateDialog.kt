@@ -9,8 +9,7 @@ class UpdateDialog(
     id: String,
     entry: TranslatableText,
     val playerUpdate: StubbornPlayerUpdate
-):
-    FeedbackDialog(id, entry) {
+): FeedbackDialog(id, entry) {
     companion object {
         fun fromJsonOrNull(jsonObject: JsonObject, bimoe: Bimoe): UpdateDialog? {
             val feedbackDialog =

@@ -1,7 +1,12 @@
 {
   "feedbackDialogs": [
+    { "id": "no_progress" },
+
     { "id": "away" },
-    { "id": "no_progress" }
+    { "id": "busy" },
+    { "id": "singing", "onlyFor": ["SILVIS", "MANAMI"] },
+    { "id": "laughing", "onlyFor": ["SORBIRE", "ERIMOS"] },
+    { "id": "crying", "onlyFor": ["FINIS", "LAVINA"] }
   ],
   "updateDialogs": [
     { "id": "progress_forward", "packet": "PROGRESS_FORWARD" }

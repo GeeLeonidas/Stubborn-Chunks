@@ -13,7 +13,8 @@ open class NodeDialog(
     val responses: List<TranslatableText>,
     val nextDialogsIds: List<String>,
     val entriesBimoeEffects: Map<Int, EntryBimoeEffect>,
-    val entriesTextEffects: Map<Int, List<EntryTextEffect>>
+    val entriesTextEffects: Map<Int, List<EntryTextEffect>>,
+    val changeAwayTo: String?
 ) {
     companion object {
         fun fromJson(dialogObject: JsonObject, bimoe: Bimoe): NodeDialog {
@@ -69,9 +70,14 @@ open class NodeDialog(
                         entriesTextEffects[entryIndex] = tempEffectList
                 }
 
+            var changeAwayTo: String? = null
+            if (dialogObject.has("changeAwayTo"))
+                changeAwayTo = dialogObject["changeAwayTo"].asString
+
             return NodeDialog(
-                id, entries, responseTexts,
-                nextDialogsIds, entriesBimoeEffects, entriesTextEffects
+                id, entries, responseTexts, nextDialogsIds,
+                entriesBimoeEffects, entriesTextEffects,
+                changeAwayTo
             )
         }
     }

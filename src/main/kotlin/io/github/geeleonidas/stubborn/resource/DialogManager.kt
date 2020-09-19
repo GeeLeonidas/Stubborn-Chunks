@@ -58,15 +58,19 @@ object DialogManager {
     }
 
     private fun pickNewDialog(bimoe: Bimoe, playerEntity: PlayerEntity): NodeDialog {
-        val playerProgress = (playerEntity as StubbornPlayer).getBimoeProgress(bimoe)
+        val moddedPlayer = (playerEntity as StubbornPlayer)
+
+        val playerProgress = moddedPlayer.getBimoeProgress(bimoe)
         val starterDialogs = rootDialogs[bimoe]?.filter {
             it.dialogCondition.checkFor(playerEntity) &&
             it.dialogCondition.progressNeeded <= playerProgress
         } ?: emptyList()
 
-        return starterDialogs.minBy { it.dialogCondition.progressNeeded } ?: findDialog(bimoe, "~away")
+        return starterDialogs.minBy { it.dialogCondition.progressNeeded } ?:
+            findDialog(bimoe, moddedPlayer.getCurrentAwayDialog(bimoe))
     }
 
+    // TODO: Use HashMaps instead
     fun findDialog(bimoe: Bimoe, id: String) =
         updateDialogs[bimoe]?.find { it.id == id } ?:
         feedbackDialogs[bimoe]?.find { it.id == id } ?:
