@@ -16,34 +16,20 @@ import java.io.InputStreamReader
 
 object DialogManager {
 
-    fun initialize() {}
+    fun initialize() = Unit
 
-    private val generateErrorDialog = { searchId: String ->
+    private fun generateErrorDialog(searchId: String) =
         FeedbackDialog(
             "error", TranslatableText("dialog.${Stubborn.modId}.error", searchId)
         )
-    }
 
-    private val rootDialogs: Map<Bimoe, List<RootDialog>>
-    private val nodeDialogs: Map<Bimoe, List<NodeDialog>>
-    private val feedbackDialogs: Map<Bimoe, List<FeedbackDialog>>
-    private val updateDialogs: Map<Bimoe, List<UpdateDialog>>
+    private val loadedDialogs: List<DialogContainer>
     init {
-        val starterDialogs = mutableMapOf<Bimoe, List<RootDialog>>()
-        val bimoeDialogs = mutableMapOf<Bimoe, List<NodeDialog>>()
-        val visualDialogs = mutableMapOf<Bimoe, List<FeedbackDialog>>()
-        val packetDialogs = mutableMapOf<Bimoe, List<UpdateDialog>>()
+        val tempLoadedDialogs = MutableList(Bimoe.values().size) { DialogContainer.EMPTY }
         Bimoe.values().forEach { bimoe ->
-            val dialogContainer = loadBimoeDialogs(bimoe)
-            starterDialogs[bimoe] = dialogContainer.rootDialogs
-            bimoeDialogs[bimoe] = dialogContainer.nodeDialogs
-            visualDialogs[bimoe] = dialogContainer.feedbackDialogs
-            packetDialogs[bimoe] = dialogContainer.updateDialogs
+            tempLoadedDialogs[bimoe.ordinal] = loadBimoeDialogs(bimoe)
         }
-        rootDialogs = starterDialogs.toMap()
-        nodeDialogs = bimoeDialogs.toMap()
-        feedbackDialogs = visualDialogs.toMap()
-        updateDialogs = packetDialogs.toMap()
+        loadedDialogs = tempLoadedDialogs.toList()
 
         Stubborn.log("ERROR 11: [ERROR_BAD_FORMAT (0xB)]", Level.WARN)
     }
@@ -61,21 +47,20 @@ object DialogManager {
         val moddedPlayer = (playerEntity as StubbornPlayer)
 
         val playerProgress = moddedPlayer.getBimoeProgress(bimoe)
-        val starterDialogs = rootDialogs[bimoe]?.filter {
+        val starterDialogs = loadedDialogs[bimoe.ordinal].root.filter {
             it.dialogCondition.checkFor(playerEntity) &&
             it.dialogCondition.progressNeeded <= playerProgress
-        } ?: emptyList()
+        }
 
         return starterDialogs.minBy { it.dialogCondition.progressNeeded } ?:
             findDialog(bimoe, moddedPlayer.getCurrentAwayDialog(bimoe))
     }
 
-    // TODO: Use HashMaps instead
     fun findDialog(bimoe: Bimoe, id: String) =
-        updateDialogs[bimoe]?.find { it.id == id } ?:
-        feedbackDialogs[bimoe]?.find { it.id == id } ?:
-        rootDialogs[bimoe]?.find { it.id == id } ?:
-        nodeDialogs[bimoe]?.find { it.id == id } ?: generateErrorDialog.invoke(id)
+        loadedDialogs[bimoe.ordinal].find(id) ?: generateErrorDialog(id)
+
+    fun getAllDialogs(bimoe: Bimoe) =
+        loadedDialogs[bimoe.ordinal].getAllJoined()
 
     private fun loadBimoeDialogs(bimoe: Bimoe): DialogContainer {
         val bimoePath = Stubborn.resource("dialog/${bimoe.lowerCasedName}.json")

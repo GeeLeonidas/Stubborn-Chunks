@@ -26,7 +26,7 @@ class WBimoeSprite(bimoe: Bimoe):
     @Environment(EnvType.CLIENT)
     override fun setImage(image: Identifier): WSprite {
         if (MinecraftClient.getInstance().textureManager.getTexture(image) == null) {
-            Stubborn.log("Bimoe texture not found!", Level.WARN)
+            Stubborn.log("Bimoe texture '${this.frames[0]}' not found!", Level.WARN)
             return super.setImage(defaultSprite)
         }
 

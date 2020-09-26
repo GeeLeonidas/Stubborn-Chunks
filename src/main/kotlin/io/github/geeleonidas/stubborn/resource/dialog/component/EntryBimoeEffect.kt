@@ -5,7 +5,7 @@ import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 
 enum class EntryBimoeEffect(
-    private val lambdaBimoeEffect: (Bimoe, WBimoeSprite, WDialogBox) -> Unit = { _,_,_ -> },
+    private val lambdaBimoeEffect: (Bimoe, WBimoeSprite, WDialogBox) -> Unit = { _, _, _ -> },
     private val isAway: Boolean = false
 ) {
 

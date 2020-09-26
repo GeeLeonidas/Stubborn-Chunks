@@ -4,7 +4,7 @@ import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 
 enum class StubbornPlayerUpdate(
-    private val executeLambda: (Bimoe, StubbornPlayer) -> Unit = { _,_ -> }
+    private val executeLambda: (Bimoe, StubbornPlayer) -> Unit = { _, _ -> }
 ) {
 
     PROGRESS_FORWARD(

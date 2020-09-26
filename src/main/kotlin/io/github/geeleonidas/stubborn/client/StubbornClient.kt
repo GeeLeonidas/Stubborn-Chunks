@@ -23,5 +23,7 @@ fun init() {
         )
     }
 
+    StubbornInit.registerS2CPackets()
+
     Stubborn.log("Biomes registered as EntityType.MOE successfully!")
 }

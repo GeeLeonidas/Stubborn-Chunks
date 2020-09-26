@@ -25,7 +25,9 @@ fun init() {
 
     StubbornInit.registerBlocks()
     StubbornInit.registerItems()
-    StubbornInit.registerPackets()
+    StubbornInit.registerC2SPackets()
+    StubbornInit.registerArgumentTypes()
+    StubbornInit.registerServerCommands()
 
     DialogManager.initialize()
 }

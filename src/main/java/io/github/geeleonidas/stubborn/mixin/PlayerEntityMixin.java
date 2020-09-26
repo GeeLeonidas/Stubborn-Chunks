@@ -1,10 +1,13 @@
 package io.github.geeleonidas.stubborn.mixin;
 
 import io.github.geeleonidas.stubborn.Bimoe;
+import io.github.geeleonidas.stubborn.Stubborn;
 import io.github.geeleonidas.stubborn.util.StubbornPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import org.apache.logging.log4j.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -14,6 +17,8 @@ import java.util.Map;
 
 @Mixin(PlayerEntity.class)
 abstract public class PlayerEntityMixin implements StubbornPlayer {
+    @Shadow public abstract String getEntityName();
+
     private final HashMap<Bimoe, Integer> bimoeProgress = new HashMap<>();
     private final HashMap<Bimoe, String> currentAwayDialog = new HashMap<>();
     private final HashMap<Bimoe, String> currentDialog = new HashMap<>();
@@ -48,6 +53,10 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     public void setCurrentDialog(Bimoe bimoe, String value) {
         currentEntry.put(bimoe, 0);
         currentDialog.put(bimoe, value);
+        Stubborn.INSTANCE.log(
+                "Setting "+ bimoe.getCapitalizedName() +"'s dialog to \""+ value +"\" for " + this.getEntityName(),
+                Level.DEBUG
+        );
     }
 
     @Override

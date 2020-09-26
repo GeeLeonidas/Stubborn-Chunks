@@ -60,7 +60,7 @@ class TransceiverGuiDescription(
         if (nextIndex < currentDialog.entries.size) {
             moddedPlayer.setCurrentEntry(bimoe, nextIndex)
             NextEntryC2SPacket.sendToServer(bimoe)
-            updateEntry(nextIndex)
+            this.updateEntry(nextIndex)
             dialogBox.dialogText.entry = currentDialog.entries[nextIndex].string
             return
         }
