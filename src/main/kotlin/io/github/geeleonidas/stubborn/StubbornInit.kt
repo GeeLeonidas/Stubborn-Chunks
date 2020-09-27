@@ -9,6 +9,7 @@ import io.github.geeleonidas.stubborn.network.NextEntryC2SPacket
 import io.github.geeleonidas.stubborn.network.SetDialogS2CPacket
 import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import io.github.geeleonidas.stubborn.server.command.SetDialogCommand
+import io.github.geeleonidas.stubborn.server.command.SetProgressCommand
 import io.github.geeleonidas.stubborn.server.command.arguments.BimoeArgumentType
 import io.github.geeleonidas.stubborn.server.command.arguments.DialogIdArgumentType
 import io.netty.buffer.Unpooled
@@ -70,6 +71,7 @@ object StubbornInit {
     @Environment(EnvType.CLIENT)
     fun registerS2CPackets() {
         SetDialogS2CPacket.initialize()
+        SetProgressCommand.initialize()
     }
 
     fun registerArgumentTypes() {
@@ -87,6 +89,7 @@ object StubbornInit {
 
     fun registerServerCommands() {
         SetDialogCommand.initialize()
+        SetProgressCommand.initialize()
     }
 }
 

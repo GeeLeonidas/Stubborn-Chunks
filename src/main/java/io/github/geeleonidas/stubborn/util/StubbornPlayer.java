@@ -5,6 +5,7 @@ import io.github.geeleonidas.stubborn.Bimoe;
 public interface StubbornPlayer {
     int getBimoeProgress(Bimoe bimoe);
     void updateBimoeProgress(Bimoe bimoe, Integer delta);
+    void setBimoeProgress(Bimoe bimoe, Integer value);
 
     String getCurrentAwayDialog(Bimoe bimoe);
     void setCurrentAwayDialog(Bimoe bimoe, String value);

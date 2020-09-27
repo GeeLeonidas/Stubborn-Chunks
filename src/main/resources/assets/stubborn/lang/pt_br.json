@@ -1,6 +1,10 @@
 {
   "block.stubborn.transceiver": "Transceptor",
 
+  "commands.stubborn.set_dialog.not_found": "ERRO: %s não possui um diálogo com este id! (\"%s\")",
+  "commands.stubborn.set_dialog.success": "Mudando o diálogo de %s com %s para \"%s\"",
+  "commands.stubborn.set_progress.success": "Mudando o progresso de %s com %s para %s",
+
   "dialog.stubborn.error": "§4Erro 404: §rDiálogo §5\"%s\"§r não encontrado.",
 
 
