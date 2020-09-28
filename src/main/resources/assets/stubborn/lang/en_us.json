@@ -9,8 +9,9 @@
 
 
   "dialog.stubborn.finis.~away": "§o* You look into the void and perceive a presence, but, suddenly, it vanishes.§r",
+  "dialog.stubborn.finis.~crying": "§o* Alone in the void, you hear muffled sobs, but, as you realize, they're yours.",
   "dialog.stubborn.finis.~progress_forward": "§o* It seems that you made someone's day.",
-  "dialog.stubborn.finis.~no_progress": "§o* All of a sudden, Finis vanishes. You couldn't feel more guilty.",
+  "dialog.stubborn.finis.~no_progress": "§o* All of a sudden, Finis vanishes.",
 
   "dialog.stubborn.finis.death.1": "Oh. What a unusual sensation... You there, do I know you?",
   "dialog.stubborn.finis.death.2": "I get the feeling that this isn't the first time we met.",

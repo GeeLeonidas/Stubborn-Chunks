@@ -51,6 +51,10 @@ abstract public class PlayerEntityMixin implements StubbornPlayer {
     @Override
     public void setCurrentAwayDialog(Bimoe bimoe, String value) {
         currentAwayDialog.put(bimoe, value);
+        Stubborn.INSTANCE.log(
+                "Setting "+ bimoe.getCapitalizedName() +"'s away dialog to \""+ value +"\" for " + this.getEntityName(),
+                Level.DEBUG
+        );
     }
 
     @Override

@@ -9,8 +9,9 @@
 
 
   "dialog.stubborn.finis.~away": "§o* Você olha para o vazio e sente uma presença, mas, de repente, ela se esvai.§r",
+  "dialog.stubborn.finis.~crying": "§o* Sozinho no vazio, você escuta um choro abafado, mas, conforme percebe, ele é seu.",
   "dialog.stubborn.finis.~progress_forward": "§o* Parece que você fez o dia de alguém.",
-  "dialog.stubborn.finis.~no_progress": "§o* De repente, Finis desaparece. Você nunca se sentiu tão arrependido.",
+  "dialog.stubborn.finis.~no_progress": "§o* De repente, Finis desaparece.",
 
   "dialog.stubborn.finis.death.1": "Ah. Que sensação estranha. Você aí, eu te conheço?",
   "dialog.stubborn.finis.death.2": "Eu tenho a impressão de que esta não é a primeira vez que nos vimos.",
@@ -28,5 +29,5 @@
   "dialog.stubborn.finis.death_sarcastic.3": "[Isso foi uma cantada?!]",
 
 
-  "dialog.stubborn.silvis.away": "§o* Subitamente, você começa a sentir saudade. Você olha para os lados e não vê ninguém, mas este sentimento certamente te conforta.§r"
+  "dialog.stubborn.silvis.~away": "§o* Subitamente, você começa a sentir saudade. Você olha para os lados e não vê ninguém, mas este sentimento certamente te conforta.§r"
 }

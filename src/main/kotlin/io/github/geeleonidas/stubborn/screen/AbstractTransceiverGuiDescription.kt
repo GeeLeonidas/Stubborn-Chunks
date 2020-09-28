@@ -43,7 +43,7 @@ abstract class AbstractTransceiverGuiDescription(
             if (value.id == currentDialog.id)
                 return
             if (value !is FeedbackDialog) {
-                moddedPlayer.setCurrentAwayDialog(bimoe, currentDialog.changeAwayTo ?: "~away")
+                moddedPlayer.setCurrentAwayDialog(bimoe, value.changeAwayTo ?: "~away")
 
                 moddedPlayer.setCurrentDialog(bimoe, value.id)
                 ChangeDialogC2SPacket.sendToServer(bimoe)
