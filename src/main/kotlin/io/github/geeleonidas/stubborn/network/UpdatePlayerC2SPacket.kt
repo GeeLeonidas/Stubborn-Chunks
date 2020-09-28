@@ -2,7 +2,7 @@ package io.github.geeleonidas.stubborn.network
 
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
-import io.github.geeleonidas.stubborn.StubbornC2SPacket
+import io.github.geeleonidas.stubborn.init.types.StubbornC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import io.github.geeleonidas.stubborn.resource.dialog.UpdateDialog
 import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
@@ -12,7 +12,6 @@ import net.minecraft.network.PacketByteBuf
 
 object UpdatePlayerC2SPacket: StubbornC2SPacket {
     override val id = Stubborn.makeId("update_progress")
-    init { register() }
 
     override fun accept(packetContext: PacketContext, packetByteBuf: PacketByteBuf) {
         val transceiverGuiDescription = packetContext.player.currentScreenHandler

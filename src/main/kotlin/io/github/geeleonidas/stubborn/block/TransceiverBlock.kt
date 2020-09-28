@@ -1,8 +1,8 @@
 package io.github.geeleonidas.stubborn.block
 
 import io.github.geeleonidas.stubborn.Stubborn
-import io.github.geeleonidas.stubborn.StubbornBlock
 import io.github.geeleonidas.stubborn.block.entity.TransceiverBlockEntity
+import io.github.geeleonidas.stubborn.init.types.StubbornBlock
 import net.minecraft.block.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext

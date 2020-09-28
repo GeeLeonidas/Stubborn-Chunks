@@ -6,7 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
-import io.github.geeleonidas.stubborn.StubbornServerCommand
+import io.github.geeleonidas.stubborn.init.types.StubbornServerCommand
 import io.github.geeleonidas.stubborn.network.SetProgressS2CPacket
 import io.github.geeleonidas.stubborn.server.command.arguments.BimoeArgumentType
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
@@ -26,7 +26,6 @@ object SetProgressCommand: StubbornServerCommand {
                 .executes(this)
             )
         )
-    init { this.register() }
 
     override fun run(context: CommandContext<ServerCommandSource>): Int {
         Stubborn.log("Executing SetProgressCommand.run", Level.DEBUG)

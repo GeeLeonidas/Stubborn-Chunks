@@ -1,6 +1,6 @@
 package io.github.geeleonidas.stubborn.block.entity
 
-import io.github.geeleonidas.stubborn.StubbornInit
+import io.github.geeleonidas.stubborn.init.StubbornInit
 import io.github.geeleonidas.stubborn.screen.TransceiverGuiDescription
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.entity.BlockEntity

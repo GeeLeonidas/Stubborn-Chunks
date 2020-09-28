@@ -2,7 +2,7 @@ package io.github.geeleonidas.stubborn.network
 
 import io.github.geeleonidas.stubborn.Bimoe
 import io.github.geeleonidas.stubborn.Stubborn
-import io.github.geeleonidas.stubborn.StubbornS2CPacket
+import io.github.geeleonidas.stubborn.init.types.StubbornS2CPacket
 import io.github.geeleonidas.stubborn.util.StubbornPlayer
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.PacketContext
@@ -12,7 +12,6 @@ import net.minecraft.network.PacketByteBuf
 
 object SetProgressS2CPacket: StubbornS2CPacket {
     override val id = Stubborn.makeId("set_progress")
-    init { this.register() }
 
     override fun accept(packetContext: PacketContext, packetByteBuf: PacketByteBuf) {
         val moddedPlayer = packetContext.player as StubbornPlayer

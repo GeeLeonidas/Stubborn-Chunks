@@ -1,5 +1,6 @@
 package io.github.geeleonidas.stubborn
 
+import io.github.geeleonidas.stubborn.init.StubbornInit
 import io.github.geeleonidas.stubborn.resource.DialogManager
 import net.minecraft.item.ItemGroup
 import net.minecraft.util.Identifier

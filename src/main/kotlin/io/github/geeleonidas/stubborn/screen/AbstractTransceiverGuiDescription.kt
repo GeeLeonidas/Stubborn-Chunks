@@ -3,10 +3,10 @@ package io.github.geeleonidas.stubborn.screen
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WPlainPanel
 import io.github.geeleonidas.stubborn.Bimoe
-import io.github.geeleonidas.stubborn.StubbornInit
 import io.github.geeleonidas.stubborn.client.widget.WBimoeSprite
 import io.github.geeleonidas.stubborn.client.widget.WDialogBox
 import io.github.geeleonidas.stubborn.client.widget.WResponseButton
+import io.github.geeleonidas.stubborn.init.StubbornInit
 import io.github.geeleonidas.stubborn.network.ChangeDialogC2SPacket
 import io.github.geeleonidas.stubborn.network.UpdatePlayerC2SPacket
 import io.github.geeleonidas.stubborn.resource.DialogManager
